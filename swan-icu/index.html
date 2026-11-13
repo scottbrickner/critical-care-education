@@ -296,6 +296,7 @@ footer a{color:var(--gold)}
 .ckgroup label:last-child{border-bottom:0}
 .ckgroup input{width:22px;height:22px;flex:0 0 22px;margin:1px 0 0;accent-color:var(--green)}
 .ckgroup label:has(input:checked){color:var(--ink-3);text-decoration:line-through;text-decoration-color:var(--rule)}
+.tbl.loop td:nth-child(2),.tbl.loop td:nth-child(4){font-weight:600;color:var(--ink)}
 .steps{margin:12px 0;padding-left:22px;font-size:15px}.steps li{margin:6px 0}
 .tbl.shock td{text-align:center;font-size:18px}.tbl.shock td:first-child{text-align:left;font-size:14.5px}.tbl.shock th:not(:first-child){text-align:center}
 @media print{
@@ -439,6 +440,7 @@ footer a{color:var(--gold)}
           <label><input type="checkbox" data-k="e4"><span>Balloon tested with 1.5 mL, then deflated passively (provider or RN)</span></label>
           <label><input type="checkbox" data-k="e5"><span>Distal (yellow) → PAP transducer; blue → CVP transducer + CO syringe</span></label>
           <label><input type="checkbox" data-k="e6"><span>Central line checklist started; time-out done</span></label>
+          <label><input type="checkbox" data-k="e7"><span>Roles set: provider calls balloon up/down; <b>RN inflates, deflates, and reads back</b></span></label>
         </fieldset>
         <fieldset class="ckgroup">
           <legend><b>F</b> After placement</legend>
@@ -468,20 +470,41 @@ footer a{color:var(--gold)}
         <table class="tbl">
           <thead><tr><th>Tip in</th><th>Depth*</th><th>What you see on the yellow channel</th><th>Watch for</th></tr></thead>
           <tbody>
-            <tr><td><b>RA</b></td><td class="v">~20 cm</td><td>Low, wavy a/c/v trace, ~2–6 mmHg. Balloon goes <b>up</b> here.</td><td>Call out "RA, balloon up."</td></tr>
+            <tr><td><b>RA</b></td><td class="v">~20 cm</td><td>Low, wavy a/c/v trace, ~2–6 mmHg. The balloon goes <b>up</b> here.</td><td>Provider calls "balloon up"; you inflate and confirm out loud.</td></tr>
             <tr><td><b>RV</b></td><td class="v">30–35 cm</td><td>Tall systolic (20–30), diastolic near 0 with an upward slope.</td><td><b>PVCs / runs of VT</b> — the riskiest stretch. Call out ectopy; it should settle once in the PA.</td></tr>
             <tr><td><b>PA</b></td><td class="v">40–45 cm</td><td>Same systolic, but diastolic <b>steps up</b> (8–15) with a dicrotic notch.</td><td>Call out "PA" — the diastolic jump is the tell.</td></tr>
-            <tr><td><b>Wedge</b></td><td class="v">~50 cm</td><td>Trace drops and flattens into a/v waves (6–12).</td><td>Balloon <b>down</b> → PA trace must come back. If it doesn't, it's sitting in wedge.</td></tr>
+            <tr><td><b>Wedge</b></td><td class="v">~50 cm</td><td>Trace drops and flattens into a/v waves (6–12).</td><td>Provider calls "balloon down"; you deflate and confirm. The PA trace must come back — if it doesn't, say so.</td></tr>
           </tbody>
         </table>
       </div>
       <p class="sub" style="font-size:13.5px;margin-top:8px">*From the right IJ. Left IJ or left subclavian: add ~5 cm. Shorter patients run less deep (Bootsma 2022).</p>
+      <div class="block">
+        <h3>Closed-loop communication · every balloon move, out loud</h3>
+        <p class="sub">The provider calls it. You do it and say it back. Nothing advances or pulls back until the loop is closed.</p>
+        <div class="tscroll">
+          <table class="tbl loop">
+            <thead><tr><th>Moment</th><th>Provider says</th><th>RN does</th><th>RN says back</th></tr></thead>
+            <tbody>
+              <tr><td><b>Tip in RA</b></td><td>"Balloon up."</td><td>Inflate with the catheter's syringe, ≤ 1.5 mL; lock.</td><td>"Balloon is <b>up</b>, 1.5 mL, locked."</td></tr>
+              <tr><td><b>Advancing</b></td><td>"Advancing."</td><td>Watch the yellow channel and the cm marks.</td><td>"RA at 20." → "RV, PVCs." → "PA at 45." → "Wedge at 50."</td></tr>
+              <tr><td><b>Wedge reached</b></td><td>"Balloon down."</td><td>Remove the syringe; let it deflate passively. Expel air, reattach, lock.</td><td>"Balloon is <b>down</b>." Then: "PA trace is back" — or "Still wedged."</td></tr>
+              <tr><td><b>Any pullback</b></td><td>"Pulling back. Confirm balloon down."</td><td>Check: syringe off, red lines aligned.</td><td>"Balloon is <b>down</b>. Clear to pull back."</td></tr>
+              <tr><td><b>Ectopy</b></td><td>—</td><td>Watch for sustained VT or a pressure drop.</td><td>"Run of VT" / "Pressure dropping" — the provider responds "Balloon down, pulling back," and you confirm "Balloon is down."</td></tr>
+              <tr><td><b>Final position</b></td><td>"Final position, 45 cm."</td><td>Read the mark at the introducer; document.</td><td>"45 cm at the introducer, wedged at 1.25 mL — documented."</td></tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="callout">
+          <div class="ml">Close the loop</div><p>If you didn't hear a call, or your read-back wasn't acknowledged, <strong>stop and ask</strong>: "Is the balloon up or down?" The balloon state is the one thing that should never be assumed.</p>
+        </div>
+      </div>
+
 
       <div class="block cards">
         <div class="card">
           <h4>Balloon rule</h4>
           <div class="big">Up to advance</div>
-          <p>Balloon inflated to move forward; deflated before any pullback. Never pull back with the balloon up — that's how valves and vessels get hurt.</p>
+          <p>Balloon inflated to move forward; deflated before any pullback — each change called by the provider and confirmed by you. Never pull back with the balloon up; that's how valves and vessels get hurt.</p>
         </div>
         <div class="card">
           <h4>Sterile field</h4>
