@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Counting the Twitch · Train-of-Four &amp; Neuromuscular Blockade · Keck Medicine of USC</title>
+<meta name="description" content="Train-of-four (TOF) and neuromuscular blockade reference for ICU nurses: prep, electrode placement, finding the threshold, reading the count, troubleshooting 0/4, hands-on station.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800&family=Oswald:wght@700&family=Source+Sans+3:wght@400;600;700;900&display=swap" rel="stylesheet">
+<style>
+
+
+:root{
+  --bg:#FFFFFF; --surface:#FFFFFF; --ink:#000000; --body-c:#333333; --ink-2:#555555; --ink-3:#757575;
+  --rule:#CCCCCC; --rule-2:#E7E7E7; --soft:#F7F7F7;
+  --cardinal:#990000; --cardinal-tint:#F7E4E4; --gold:#FFCC00; --gold-ink:#9A7B00;
+  --amber:#9A7B00; --amber-bar:#DDBC68; --amber-tint:#FFF4CC; --green:#00695C; --green-bar:#7FBBBE; --green-tint:#DFF1F1;
+  --navy:#2E6A8A; --navy-bar:#689CB8; --navy-tint:#EAF2F7;
+  --mon-bg:#07090B; --mon-grid:#1A2027; --ecg:#3CE36B; --pap:#FFD93B; --cvp:#48C6FF; --pcwp:#FF8FD1;
+  --u:8px; --maxw:1280px;
+  --numeral:"Oswald","Archivo Black","Arial Black",sans-serif;
+  --display:"Montserrat","Segoe UI",system-ui,sans-serif;
+  --body:"Source Sans 3","Source Sans Pro","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:72px}
+body{margin:0;background:var(--bg);color:var(--body-c);font:17px/1.5 var(--body);-webkit-font-smoothing:antialiased}
+a{color:var(--cardinal)}
+.accent-bar{height:4px;background:var(--cardinal)}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 32px}
+@media (max-width:720px){.wrap{padding:0 16px}}
+
+/* ---------- top bar ---------- */
+.topbar{position:sticky;top:0;z-index:40;background:rgba(255,255,255,.95);backdrop-filter:saturate(1.2) blur(8px);border-bottom:1px solid var(--rule)}
+.topbar .wrap{display:flex;align-items:center;gap:16px;height:56px}
+.brand{font:900 13px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--ink);text-decoration:none;white-space:nowrap}
+.brand span{color:var(--cardinal)}
+.topnav{display:flex;gap:4px;margin-left:auto;overflow:hidden}
+.topnav a{font:600 13px/1 var(--body);color:var(--ink-2);text-decoration:none;padding:8px 10px;border-radius:4px;white-space:nowrap}
+.topnav a b{font:900 11px var(--body);color:var(--ink-3);margin-right:6px}
+.topnav a:hover,.topnav a.active{background:var(--surface);color:var(--ink)}
+.topnav a.active b{color:var(--cardinal)}
+.burger{display:none;margin-left:auto;width:44px;height:44px;border:0;background:none;cursor:pointer;border-radius:4px}
+.burger span{display:block;width:22px;height:2px;background:var(--ink);margin:5px auto}
+@media (max-width:1080px){.topnav{display:none}.burger{display:block}}
+.drawer{position:fixed;inset:0;z-index:60;display:none}
+.drawer.open{display:block}
+.drawer .scrim{position:absolute;inset:0;background:rgba(20,16,12,.35)}
+.drawer nav{position:absolute;right:0;top:0;bottom:0;width:min(340px,86vw);background:var(--surface);padding:24px;border-left:6px solid var(--cardinal);overflow:auto}
+.drawer nav a{display:flex;gap:16px;align-items:baseline;padding:14px 0;border-bottom:1px solid var(--rule-2);text-decoration:none;color:var(--ink);font-weight:600}
+.drawer nav a b{font:700 16px var(--numeral);color:var(--cardinal);width:24px}
+.drawer .close{float:right;border:0;background:none;font:600 14px var(--body);cursor:pointer;padding:8px;color:var(--ink-2)}
+
+/* ---------- hero ---------- */
+.hero{padding:56px 0 64px;border-bottom:1px solid var(--rule)}
+.series{font:700 12px/1.4 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3);display:flex;gap:10px;flex-wrap:wrap}
+.series i{font-style:normal;color:var(--cardinal)}
+.hero h1{font:800 clamp(44px,7vw,92px)/1 var(--display);letter-spacing:-.03em;color:var(--ink);margin:20px 0 16px}
+.hero h1 em{font-style:normal;color:var(--cardinal)}
+.hero .thesis{font-size:22px;color:var(--ink-3);margin:0 0 40px}
+.hgrid{display:grid;grid-template-columns:7fr 5fr;gap:48px;margin-bottom:32px}
+.hero .lede{font-size:19px;line-height:1.55;color:var(--body-c);margin:0}
+.facts{margin:0;border-top:2px solid var(--ink)}
+.facts div{display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid var(--rule-2);font-size:15px}
+.facts dt{color:var(--ink-3)} .facts dd{margin:0;font-weight:700;color:var(--ink);text-align:right}
+@media (max-width:860px){.hgrid{grid-template-columns:1fr;gap:24px}.hero{padding:32px 0 48px}}
+.grid{display:grid;grid-template-columns:repeat(12,1fr);gap:24px}
+/* ---------- sections ---------- */
+section.sec{padding:72px 0 80px}
+.sgrid{display:grid;grid-template-columns:15% minmax(0,1fr);column-gap:3%}
+.rail{border-right:1px solid var(--rule);padding-right:16px}
+.rail .in{position:sticky;top:88px;display:flex;flex-direction:column;gap:20px}
+.eyebrow{font:700 12px/1.3 var(--body);letter-spacing:.08em;text-transform:uppercase;color:var(--cardinal)}
+.idx{font:700 112px/.85 var(--numeral);color:var(--ink);letter-spacing:-.02em}
+.tick{display:block;width:40px;height:4px;background:var(--cardinal);margin-top:10px}
+.content{min-width:0}
+.cbar{height:6px;background:var(--cardinal);margin-bottom:28px}
+.chead{display:grid;grid-template-columns:1fr auto;gap:8px 24px;align-items:start;margin-bottom:40px}
+.chead h2{font:800 clamp(28px,3.2vw,40px)/1.1 var(--display);color:var(--ink);letter-spacing:-.015em;margin:0}
+.chead .thesis{grid-column:1/-1;font-size:19px;color:var(--ink-3);margin:0;max-width:62ch}
+.pill{font:900 11px/1 var(--body);letter-spacing:.08em;text-transform:uppercase;padding:7px 12px;border-radius:999px;color:#fff;background:var(--cardinal);white-space:nowrap;margin-top:6px}
+.pill.stretch{background:var(--ink-3)}
+@media (max-width:900px){
+  .sgrid{grid-template-columns:1fr}
+  .rail{border-right:0;border-bottom:1px solid var(--rule);padding:0 0 12px;margin-bottom:20px}
+  .rail .in{position:static;flex-direction:row;align-items:flex-end;justify-content:space-between}
+  .idx{font-size:64px}.tick{display:none}
+  section.sec{padding:48px 0 56px}
+}
+h3{font:700 20px/1.2 var(--body);color:var(--ink);margin:0 0 12px}
+h4{font:700 12px/1.2 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);margin:0 0 8px}
+.kicker{font:700 12px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--cardinal);margin-bottom:12px}
+p{margin:0 0 12px}
+.sub{color:var(--ink-2)}
+.block{margin-top:48px}
+.block:first-child{margin-top:0}
+
+/* ---------- chips ---------- */
+.chip{display:inline-flex;align-items:center;gap:6px;font:700 11px/1 var(--body);letter-spacing:.06em;text-transform:uppercase;padding:5px 8px;border-radius:3px;border:1px solid currentColor;white-space:nowrap;vertical-align:middle}
+.chip.rn{color:#fff;background:var(--ink);border-color:var(--ink)}
+.chip.verify{color:var(--amber);background:var(--amber-tint);border-color:transparent}
+.chip.prov{color:var(--cardinal);background:var(--cardinal-tint);border-color:transparent}
+.chip.pol{color:var(--navy);background:var(--navy-tint);border-color:transparent}
+.chip.now{color:#fff;background:var(--cardinal);border-color:var(--cardinal)}
+.chip.fix{color:var(--amber);border-color:var(--amber)}
+.chip.ok{color:var(--green);background:var(--green-tint);border-color:transparent}
+.legend{display:flex;flex-wrap:wrap;gap:8px 20px;padding:16px 0;border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);font-size:13px;color:var(--ink-2)}
+.legend span{display:flex;gap:8px;align-items:center}
+
+/* ---------- cards / panels ---------- */
+.cards{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.cards.two{grid-template-columns:repeat(2,1fr)}
+.cards.four{grid-template-columns:repeat(4,1fr)}
+.card{background:var(--surface);padding:24px}
+.card .big{font:900 34px/1 var(--body);color:var(--ink);letter-spacing:-.02em;margin:8px 0}
+.card p{font-size:15px;color:var(--ink-2)}
+.card ul,.sbar ul{margin:0;padding:0;list-style:none;font-size:15px}
+.card ul li,.sbar ul li{position:relative;padding-left:16px}
+.card ul li::before,.sbar ul li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;background:var(--cardinal)}
+.card li{margin:4px 0}
+@media (max-width:860px){.cards,.cards.four{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.cards,.cards.two,.cards.four{grid-template-columns:1fr}}
+.callout{border-left:5px solid var(--cardinal);background:#FBF0F0;padding:18px 24px;margin:24px 0}
+.callout.amber{border-color:var(--amber-bar);background:var(--amber-tint)}
+.callout.navy{border-color:var(--navy-bar);background:var(--navy-tint)}
+.callout .ml{font:900 11px/1 var(--body);letter-spacing:.1em;text-transform:uppercase;color:var(--cardinal);margin-bottom:8px}
+.callout.amber .ml{color:var(--amber)} .callout.navy .ml{color:var(--navy)}
+.callout p{color:var(--ink)}
+.callout p:last-child{margin:0}
+.callout strong{font-weight:700}
+
+/* ---------- catheter ---------- */
+.hubs{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+@media (max-width:1100px){.hubs{grid-template-columns:repeat(2,1fr)}}
+.caps{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:var(--rule-2);border:1px solid var(--rule-2);margin-top:-8px}
+.cap{display:flex;gap:14px;align-items:flex-start;background:#fff;padding:16px 20px;font-size:14.5px}
+.cap b{color:var(--ink)}
+.cap div>b:first-child{display:block;margin-bottom:2px}
+.cap .dot{flex:0 0 18px;height:18px;border-radius:50%;margin-top:2px}
+@media (max-width:640px){.caps{grid-template-columns:1fr}}
+.fig{margin:0;border:1px solid var(--rule-2);background:#fff}
+.fig img{display:block;width:100%;height:auto;padding:16px}
+.fig figcaption{padding:16px 24px 20px;border-top:1px solid var(--rule-2);font-size:14.5px;color:var(--body-c)}
+.fig figcaption b{color:var(--ink)}
+.fig .credit{display:block;margin-top:10px;font-size:12.5px;color:var(--ink-3)}
+.fig .credit a{color:var(--ink-3)}
+.hub{display:grid;grid-template-columns:40px 1fr;gap:16px;align-items:start;background:var(--surface);border:1px solid var(--rule);padding:20px}
+.hub .sw{width:40px;height:40px;border-radius:50%;border:1px solid rgba(0,0,0,.12)}
+.hub h3{font-size:17px;margin:2px 0 6px}
+.hub p{font-size:14px;color:var(--ink-2);margin:0 0 6px}
+.hub .do{font-size:13px;font-weight:600;color:var(--ink)}
+@media (max-width:640px){.hubs{grid-template-columns:1fr}}
+.ruler{margin-top:24px;background:var(--surface);border:1px solid var(--rule);padding:24px}
+.ruler svg{width:100%;height:auto;display:block}
+
+/* ---------- steps ---------- */
+.phases{display:grid;grid-template-columns:repeat(4,1fr);gap:24px;counter-reset:step}
+.phase{border-top:2px solid var(--ink);padding-top:16px}
+.phase h3{font-size:17px;display:flex;justify-content:space-between;align-items:baseline}
+.phase h3 small{font:700 11px var(--body);letter-spacing:.1em;color:var(--ink-3)}
+.phase ol{list-style:none;margin:0;padding:0}
+.phase li{counter-increment:step;position:relative;padding:10px 0 10px 36px;border-bottom:1px solid var(--rule-2);font-size:14.5px}
+.phase li::before{content:counter(step,decimal-leading-zero);position:absolute;left:0;top:10px;font:900 13px var(--body);color:var(--cardinal)}
+.phase li b{font-weight:700}
+@media (max-width:1000px){.phases{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.phases{grid-template-columns:1fr}}
+
+/* ---------- monitor ---------- */
+.modes{display:flex;flex-wrap:wrap;gap:8px 24px;margin-bottom:16px}
+.modes .grp{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.modes .grp>span{font:700 11px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-right:4px}
+.mbtn{font:600 14px var(--body);padding:10px 14px;min-height:40px;border:1px solid var(--rule);background:var(--surface);color:var(--ink);border-radius:4px;cursor:pointer}
+.mbtn:hover{border-color:var(--ink)}
+.mbtn[aria-pressed="true"]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.mbtn.prob[aria-pressed="true"]{background:var(--cardinal);border-color:var(--cardinal)}
+.mbtn:focus-visible,.mini:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.viewer{display:grid;grid-template-columns:minmax(0,8fr) minmax(0,4fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+@media (max-width:1000px){.viewer{grid-template-columns:1fr}}
+.monitor{background:var(--mon-bg);position:relative;padding:12px 12px 12px 12px;min-height:340px;display:flex;flex-direction:column}
+.mon-top{display:flex;justify-content:space-between;align-items:center;font:600 12px var(--body);color:#8C96A3;letter-spacing:.06em;margin-bottom:6px}
+.alarm{font:900 12px var(--body);letter-spacing:.08em;color:#fff;background:#D0021B;padding:4px 8px;border-radius:2px;visibility:hidden}
+.alarm.on{visibility:visible;animation:blink 1s steps(2,start) infinite}
+.alarm.yellow{background:#E8B400;color:#111}
+@keyframes blink{to{opacity:.35}}
+@media (prefers-reduced-motion:reduce){.alarm.on{animation:none}}
+.mon-body{display:grid;grid-template-columns:1fr 132px;gap:8px;flex:1}
+.mon-body canvas{width:100%;height:100%;min-height:290px;display:block}
+.readouts{display:flex;flex-direction:column;gap:10px;justify-content:space-between;padding:4px 0}
+.ro{font-family:var(--display)}
+.ro .lbl{font:700 12px var(--body);letter-spacing:.06em}
+.ro .val{font:700 30px/1 var(--body);letter-spacing:-.02em;margin-top:2px}
+.ro .mean{font:600 18px var(--body)}
+.ro.ecg{color:var(--ecg)} .ro.pres{color:var(--pap)}
+.mon-foot{display:flex;justify-content:space-between;align-items:center;margin-top:6px}
+.mini{font:600 12px var(--body);background:#1A2027;color:#C9D1DB;border:1px solid #2A333D;border-radius:3px;padding:6px 10px;cursor:pointer}
+.mon-foot small{color:#6D7784;font-size:11px}
+@media (max-width:560px){.mon-body{grid-template-columns:1fr}.readouts{flex-direction:row;flex-wrap:wrap;gap:16px}.mon-body canvas{min-height:230px}}
+.info{background:var(--surface);padding:24px}
+.info .tag{margin-bottom:12px}
+.info h3{font-size:22px}
+.info dl{margin:16px 0 0}
+.info dt{font:700 11px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-top:16px}
+.info dd{margin:4px 0 0;font-size:14.5px}
+.info dd.range{font:900 24px var(--body);color:var(--ink);letter-spacing:-.01em}
+.sq{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule);margin-top:24px}
+.sq figure{margin:0;background:var(--surface);padding:20px}
+.sq svg{width:100%;height:96px;display:block;background:#FBFAF8;border:1px solid var(--rule-2)}
+.sq figcaption{margin-top:12px;font-size:14px}
+.sq figcaption b{font-weight:700}
+.sq figcaption b:first-child{display:block;font:900 16px var(--body);color:var(--ink);margin-bottom:4px}
+@media (max-width:720px){.sq{grid-template-columns:1fr}}
+
+/* ---------- trouble ---------- */
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px}
+.trouble{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media (max-width:760px){.trouble{grid-template-columns:1fr}}
+.tcard{background:var(--surface);border:1px solid var(--rule);border-top:4px solid var(--amber);padding:24px;display:flex;flex-direction:column}
+.tcard.now{border-top-color:var(--cardinal)}
+.tcard.fixit{border-top-color:var(--amber)}
+.tcard header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:12px}
+.tcard h3{font-size:19px;margin:0}
+.tcard .see{font-size:14.5px;color:var(--ink-2);margin-bottom:12px}
+.tcard ol,.tcard ul{margin:0 0 12px;padding-left:20px;font-size:14.5px}
+.tcard li{margin:5px 0}
+.tcard .pacu{margin-top:auto;padding:12px 14px;background:var(--soft);font-size:13.5px;border-left:3px solid var(--ink)}
+.tcard .pacu b{font:700 11px var(--body);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:4px}
+.tcard[hidden]{display:none}
+
+/* ---------- tables ---------- */
+.tbl{width:100%;border-collapse:collapse;background:var(--surface);font-size:14.5px}
+.tbl th{font:700 11px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-2);text-align:left;padding:12px 16px;border-bottom:2px solid var(--ink);background:var(--soft)}
+.tbl td{padding:12px 16px;border-bottom:1px solid var(--rule-2);vertical-align:top}
+.tbl td.v{font:900 16px var(--body);color:var(--ink);white-space:nowrap}
+.tbl tr:last-child td{border-bottom:0}
+.tscroll{overflow-x:auto;border:1px solid var(--rule)}
+.formula{font:600 14px/1.5 ui-monospace,"Cascadia Mono","SF Mono",Consolas,monospace;background:var(--soft);padding:2px 6px;border-radius:3px;white-space:nowrap}
+.flist{display:grid;grid-template-columns:repeat(2,1fr);gap:0 24px;margin:0;padding:0;list-style:none}
+.flist li{display:flex;justify-content:space-between;gap:12px;padding:12px 0;border-bottom:1px solid var(--rule-2);font-size:14.5px;flex-wrap:wrap}
+@media (max-width:760px){.flist{grid-template-columns:1fr}}
+
+/* ---------- SBAR ---------- */
+.sbar{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.sbar>div{background:var(--surface);padding:24px}
+.sbar .L{font:700 52px/1 var(--numeral);color:var(--cardinal)}
+.sbar h3{font-size:15px;margin:8px 0 12px;text-transform:uppercase;letter-spacing:.08em}
+
+.sbar li{margin:5px 0}
+@media (max-width:1000px){.sbar{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.sbar{grid-template-columns:1fr}}
+.checks{columns:2;column-gap:32px;margin:0;padding:0;list-style:none}
+.checks li{break-inside:avoid;padding:10px 0 10px 32px;position:relative;border-bottom:1px solid var(--rule-2);font-size:14.5px}
+.checks li::before{content:"";position:absolute;left:0;top:12px;width:16px;height:16px;border:2px solid var(--ink);border-radius:2px}
+@media (max-width:700px){.checks{columns:1}}
+
+/* ---------- scope toggles (author-controlled) ---------- */
+body:not(.scope-wedge) .wedge-only{display:none}
+body.scope-wedge .wedge-hidden{display:none}
+
+/* ---------- footer ---------- */
+footer{padding:64px 0 48px;background:var(--ink);color:#CFC9C0}
+footer .grid>div{grid-column:span 4}
+footer h4{color:#fff}
+footer p,footer li{font-size:13px}
+footer ol{padding-left:18px;margin:0}
+footer li{margin:6px 0}
+footer .sig{font:800 22px var(--display);color:#fff;letter-spacing:-.01em}
+footer .fine{border-top:1px solid #3A3631;margin-top:40px;padding-top:20px;font-size:12px;color:#9C958B;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap}
+footer a{color:var(--gold)}
+@media (max-width:860px){footer .grid>div{grid-column:1/-1}}
+
+@media print{
+  .topbar,.drawer,.modes,.mon-foot,.filters{display:none!important}
+  body{background:#fff}
+  section.sec{padding:24px 0;break-inside:avoid-page}
+  .sec-head,.sec-body{grid-column:1/-1}
+  .monitor{min-height:0}
+}
+
+
+
+/* cases */
+.case{background:#fff;border:1px solid var(--rule);border-top:4px solid var(--ink);padding:24px;margin-bottom:24px}
+.case .vit{display:flex;flex-wrap:wrap;gap:6px 18px;font:700 14px var(--body);color:var(--ink);padding:10px 0;border-top:1px solid var(--rule-2);border-bottom:1px solid var(--rule-2);margin:12px 0 16px}
+.case .vit span{color:var(--ink-3);font-weight:600;margin-right:4px}
+.case .step{margin-top:16px}
+.case .step[hidden]{display:none}
+.case .opts{display:grid;gap:8px;margin-top:8px}
+.case .opts .mbtn{text-align:left;font-weight:600}
+.case .opts .mbtn.right{background:var(--green);border-color:var(--green);color:#fff}
+.case .opts .mbtn.wrong{background:var(--cardinal-tint);border-color:var(--cardinal);color:var(--cardinal)}
+.case .fb{margin-top:10px;font-size:15px;padding:12px 16px;background:var(--soft);border-left:3px solid var(--green)}
+.case .fb.bad{border-left-color:var(--cardinal)}
+.case .fb[hidden]{display:none}
+.case canvas{width:100%;height:120px;display:block;background:var(--mon-bg);margin:4px 0 0}
+
+/* policy crosswalk */
+.polgrid{display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.polgrid>div{background:#fff;padding:20px}
+.polgrid h3{font-size:16px;margin-bottom:6px}
+.polgrid p{font-size:14.5px;color:var(--ink-2);margin:0}
+@media (max-width:760px){.polgrid{grid-template-columns:1fr}}
+a.polink{font-weight:700}
+/* gallery quiz */
+.quiz{display:none;margin-top:16px}
+.quiz.on{display:block}
+.quiz .opts{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.quiz .opts .mbtn{text-align:left}
+.quiz .opts .mbtn.right{background:var(--green);border-color:var(--green);color:#fff}
+.quiz .opts .mbtn.wrong{background:var(--cardinal-tint);border-color:var(--cardinal);color:var(--cardinal)}
+.quiz .score{font:700 13px var(--body);color:var(--ink-3);margin-top:10px}
+@media (max-width:560px){.quiz .opts{grid-template-columns:1fr}}
+
+/* ================= TOF additions ================= */
+.ctl .lv{font:700 11px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:20px 0 8px;padding-top:12px;border-top:1px solid var(--rule-2)}
+.ctl .lv:first-child{margin-top:0;padding-top:0;border:0}
+
+:root{--twitch:#3CE36B;--twitch-dim:#1F4D2C}
+.order{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.order>div{background:#fff;padding:20px}
+.order .L{font:700 40px/1 var(--numeral);color:var(--cardinal)}
+.order h3{font-size:16px;margin:10px 0 6px}
+.order p{font-size:14px;color:var(--ink-2);margin:0}
+@media (max-width:1000px){.order{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.order{grid-template-columns:1fr}}
+
+/* site cards */
+.sites{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.site{background:#fff;display:flex;flex-direction:column}
+.site .art{background:#FBFAF8;border-bottom:1px solid var(--rule-2);padding:12px}
+.site svg{width:100%;height:auto;display:block}
+.site .tx{padding:20px 24px 24px}
+.site .tx h3{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.site .tx ol{margin:0 0 12px;padding-left:20px;font-size:14.5px}
+.site .tx li{margin:5px 0}
+.site .watch{padding:10px 14px;background:var(--green-tint);border-left:3px solid var(--green);font-size:14px;margin-bottom:8px}
+.site .watch b,.site .nope b{font:700 11px var(--body);letter-spacing:.1em;text-transform:uppercase;display:block;margin-bottom:2px}
+.site .watch b{color:var(--green)}
+.site .nope{padding:10px 14px;background:var(--cardinal-tint);border-left:3px solid var(--cardinal);font-size:14px}
+.site .nope b{color:var(--cardinal)}
+@media (max-width:1000px){.sites{grid-template-columns:1fr}}
+.leadkey{display:flex;gap:20px;flex-wrap:wrap;font-size:14px;margin:16px 0 0}
+.leadkey span{display:flex;align-items:center;gap:8px}
+.leadkey i{width:14px;height:14px;border-radius:50%;display:inline-block}
+
+/* PNS sim */
+.pns{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,5fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+@media (max-width:1000px){.pns{grid-template-columns:1fr}}
+.pns .stage{background:var(--mon-bg);padding:16px;display:flex;flex-direction:column;gap:12px}
+.pns .stage svg{width:100%;height:auto;display:block;max-height:300px}
+.pns .tw{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;align-items:end;height:84px}
+.pns .tw div{background:#11171D;border:1px solid #2A333D;height:100%;position:relative;border-radius:2px;overflow:hidden}
+.pns .tw div i{position:absolute;left:0;right:0;bottom:0;height:0;background:var(--twitch);transition:height .08s}
+.pns .tw div span{position:absolute;top:4px;left:6px;font:700 11px var(--body);color:#6D7784}
+.pns.blind .tw{visibility:hidden}
+.pns .read{display:flex;justify-content:space-between;align-items:baseline;gap:12px;color:#C9D1DB;font:600 13px var(--body);min-height:22px;flex-wrap:wrap}
+.pns .read b{font:700 26px var(--body);color:var(--twitch)}
+.pns .read .art{color:var(--gold)}
+.device{display:flex;align-items:center;gap:12px;background:#1A2027;border:1px solid #2A333D;border-radius:6px;padding:10px 12px;flex-wrap:wrap}
+.device .dial{font:700 38px/1 var(--numeral);color:#fff;min-width:54px;text-align:center;background:#07090B;border:1px solid #2A333D;border-radius:4px;padding:6px 8px}
+.device .dl{font:700 10px var(--body);letter-spacing:.12em;text-transform:uppercase;color:#8C96A3;display:block;margin-bottom:4px}
+.device button{font:700 14px var(--body);border-radius:4px;cursor:pointer;min-height:44px}
+.device .adj{width:44px;background:#2A333D;color:#fff;border:1px solid #3A4550}
+.device .go{background:var(--cardinal);color:#fff;border:0;padding:0 18px;letter-spacing:.06em}
+.device .go:disabled{opacity:.5;cursor:wait}
+.device .bat{margin-left:auto;font:700 11px var(--body);letter-spacing:.1em;color:#8C96A3}
+.device .bat.low{color:#FF6B6B}
+.pns .ctl{background:#fff;padding:24px}
+.fb2{margin-top:14px;font-size:15px;padding:12px 16px;background:var(--soft);border-left:3px solid var(--ink);min-height:52px}
+.fb2.good{border-left-color:var(--green);background:var(--green-tint)}
+.fb2.bad{border-left-color:var(--cardinal);background:#FBF0F0}
+.fb2.warn{border-left-color:var(--amber-bar);background:var(--amber-tint)}
+.steps-ol{margin:0 0 16px;padding:0;list-style:none;counter-reset:s}
+.steps-ol li{counter-increment:s;position:relative;padding:9px 0 9px 34px;border-bottom:1px solid var(--rule-2);font-size:14.5px}
+.steps-ol li::before{content:counter(s,decimal-leading-zero);position:absolute;left:0;top:9px;font:900 13px var(--body);color:var(--cardinal)}
+.btnrow{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+
+/* count table */
+.count{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.count>div{background:#fff;padding:20px}
+.count .n{font:700 48px/1 var(--numeral);color:var(--ink)}
+.count .n small{font-size:22px;color:var(--ink-3)}
+.dots{display:flex;gap:5px;margin:10px 0}
+.dots i{width:14px;height:14px;border-radius:50%;border:2px solid var(--ink)}
+.dots i.on{background:var(--ink)}
+.count .blk{font:900 13px var(--body);letter-spacing:.04em;color:var(--ink-2)}
+.count .act{margin-top:10px;font-size:14px}
+.count>div.goal{background:var(--green-tint);box-shadow:inset 0 4px 0 var(--green)}
+.count>div.over{box-shadow:inset 0 4px 0 var(--cardinal)}
+.count>div.under{box-shadow:inset 0 4px 0 var(--amber-bar)}
+@media (max-width:900px){.count{grid-template-columns:1fr 1fr}}
+@media (max-width:480px){.count{grid-template-columns:1fr}}
+
+/* troubleshooting game */
+.tsg{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+@media (max-width:1000px){.tsg{grid-template-columns:1fr}}
+.tsg>div{background:#fff;padding:24px}
+.tsg .opts{display:grid;gap:6px}
+.tsg .opts .mbtn{text-align:left}
+.tsg .opts .mbtn.done{background:var(--soft);color:var(--ink-3)}
+.tsg .opts .mbtn.hit{background:var(--green);color:#fff;border-color:var(--green)}
+.tsg .opts .mbtn.miss{background:var(--cardinal-tint);color:var(--cardinal);border-color:var(--cardinal)}
+.tlog{list-style:none;margin:0;padding:0;font-size:14.5px}
+.tlog li{padding:10px 0 10px 14px;border-bottom:1px solid var(--rule-2);border-left:3px solid var(--rule);margin-bottom:4px}
+.tlog li.good{border-left-color:var(--green)} .tlog li.bad{border-left-color:var(--cardinal)} .tlog li.warn{border-left-color:var(--amber-bar)}
+.tsg .now{font:700 13px var(--body);letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3)}
+.tsg .now b{font:700 34px/1 var(--numeral);color:var(--ink);display:block;margin-top:4px;letter-spacing:0}
+
+/* reversal */
+.rev{display:grid;grid-template-columns:repeat(4,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.rev>div{background:#fff;padding:20px}
+.rev .big{font:900 28px/1 var(--body);color:var(--ink);margin:6px 0}
+.rev p{font-size:14px;color:var(--ink-2);margin:0}
+@media (max-width:900px){.rev{grid-template-columns:1fr 1fr}}
+
+/* station */
+.roles{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--rule);border:1px solid var(--rule)}
+.roles>div{background:#fff;padding:20px}
+.roles .L{font:700 40px/1 var(--numeral);color:var(--cardinal)}
+.roles h3{font-size:16px;margin:8px 0 6px}
+.roles p{font-size:14px;color:var(--ink-2);margin:0}
+@media (max-width:760px){.roles{grid-template-columns:1fr}}
+.script{border:1px solid var(--rule);border-top:4px solid var(--ink);padding:24px;background:#fff;font-size:16px}
+.script p{margin:0 0 10px}
+.script .say{font-style:italic;color:var(--ink)}
+.faults{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.fcard{border:2px dashed var(--ink-3);padding:18px;background:#fff;break-inside:avoid}
+.fcard .k{font:700 11px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--cardinal)}
+.fcard h3{font-size:17px;margin:6px 0 6px}
+.fcard p{font-size:14px;margin:0 0 6px;color:var(--ink-2)}
+.fcard .fix{font-size:13.5px;color:var(--ink);border-top:1px solid var(--rule-2);padding-top:8px;margin-top:8px}
+@media (max-width:900px){.faults{grid-template-columns:1fr 1fr}}
+@media (max-width:560px){.faults{grid-template-columns:1fr}}
+.signrow{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:20px;font-size:13px;color:var(--ink-3)}
+.signrow div{border-top:1px solid var(--ink);padding-top:6px}
+.prbtn{margin-top:12px}
+
+/* differences */
+.diff td:first-child{font-weight:700;color:var(--ink);white-space:nowrap}
+
+@media print{
+  .accent-bar,footer,.pns,.tsg,.btnrow,.prbtn,.legend{display:none!important}
+  body.print-station main>section{display:none}
+  body.print-station main>section#station{display:block}
+  body.print-station .rail{display:none}
+  body.print-station .sgrid{grid-template-columns:1fr}
+  .fcard,.script,.checks li{break-inside:avoid}
+}
+
+</style>
+</head>
+<body>
+<!-- AUTHOR NOTE: Policy link set once in POLICY_LINKS at the top of the <script>. Steps follow SCU10-505 (Scott's call, Nov 2026); Lippincott/AACN/SCCM supply the why. -->
+<div class="accent-bar"></div>
+
+<header class="topbar">
+  <div class="wrap">
+    <a class="brand" href="#top">Counting the <span>Twitch</span></a>
+    <nav class="topnav" aria-label="Sections">
+      <a href="#before"><b>01</b>Before</a>
+      <a href="#place"><b>02</b>Placement</a>
+      <a href="#threshold"><b>03</b>Threshold</a>
+      <a href="#count"><b>04</b>Count</a>
+      <a href="#trouble"><b>05</b>0/4</a>
+      <a href="#station"><b>06</b>Hands-on</a>
+      <a href="#cases"><b>07</b>Cases</a>
+      <a href="#policy"><b>08</b>Policy</a>
+    </nav>
+    <button class="burger" aria-label="Open section menu" aria-expanded="false" aria-controls="drawer"><span></span><span></span><span></span></button>
+  </div>
+</header>
+
+<div class="drawer" id="drawer" aria-hidden="true">
+  <div class="scrim"></div>
+  <nav aria-label="Sections">
+    <button class="close" aria-label="Close menu">Close ✕</button>
+    <div class="kicker" style="margin-top:8px">Sections</div>
+    <a href="#before"><b>01</b>Before the first twitch</a>
+    <a href="#place"><b>02</b>Electrode placement</a>
+    <a href="#threshold"><b>03</b>Finding the threshold</a>
+    <a href="#count"><b>04</b>Reading the count</a>
+    <a href="#trouble"><b>05</b>Troubleshooting 0/4</a>
+    <a href="#station"><b>06</b>Hands-on station</a>
+    <a href="#cases"><b>07</b>Cases</a>
+    <a href="#policy"><b>08</b>SCU10-505 crosswalk</a>
+  </nav>
+</div>
+
+<main id="top">
+<!-- ================= HERO ================= -->
+<section class="hero">
+  <div class="wrap sgrid">
+    <aside class="rail"><div class="in"><div class="eyebrow">ICU<br>Sedation &amp; NMB</div><div><div class="idx">00</div><i class="tick"></i></div></div></aside>
+    <div class="content">
+      <div class="cbar"></div>
+      <div class="series"><span>Keck Medicine of USC</span><i>·</i><span>Critical Care Education</span><i>·</i><span>Train-of-Four</span></div>
+      <h1>Counting the <em>Twitch.</em></h1>
+      <p class="thesis">Four pulses, one thumb. The count tells you about the drug only if you trust the setup.</p>
+      <div class="hgrid">
+        <p class="lede">A working reference for ICU nurses caring for patients on a neuromuscular blocking agent (NMBA). Get the patient ready, place the electrodes, find the right setting, read the count, and fix a 0/4 before you touch the drip.</p>
+        <dl class="facts">
+          <div><dt>Who</dt><dd>Patients on a continuous NMBA</dd></div>
+          <div><dt>Preferred site</dt><dd>Ulnar nerve · thumb</dd></div>
+          <div><dt>Usual goal</dt><dd>1–2 of 4 + the clinical picture</dd></div>
+          <div><dt>Recheck</dt><dd>10–15 min after any dose change</dd></div>
+          <div><dt>Chart</dt><dd>q4h &amp; PRN · count, site, setting</dd></div>
+          <div><dt>Keck policy</dt><dd><a class="polink" data-pol="SCU10-505" href="#policy">SCU10-505</a></dd></div>
+        </dl>
+      </div>
+      <div class="callout amber" style="margin-top:0">
+        <div class="ml">First time here?</div>
+        <p>Work through the <b>CORE</b> sections, 01 to 05. In <b>03</b>, find the threshold on the simulator until you can lock the right setting every time. At the bedside with a 0/4, start at <b>05</b>.</p>
+      </div>
+      <div class="legend">
+        <span><i class="pill" style="margin:0">Core</i> Must-know for every ICU RN</span>
+        <span><i class="pill stretch" style="margin:0">Deeper</i> Hands-on, cases, evidence</span>
+        <span><i class="chip rn">RN</i> Nursing action</span>
+        <span><i class="chip prov">Call</i> Provider now</span>
+        <span><i class="chip pol">SCU10-505</i> Keck policy says</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 01 BEFORE ================= -->
+<section class="sec" id="before">
+  <div class="wrap sgrid">
+    <aside class="rail"><div class="in"><div class="eyebrow">Before the drug</div><div><div class="idx">01</div><i class="tick"></i></div></div></aside>
+    <div class="content">
+      <div class="cbar"></div>
+      <header class="chead"><h2>Before the first twitch</h2><span class="pill">CORE</span><p class="thesis">Paralysis doesn't sedate, numb, or erase memory. A paralyzed patient can be wide awake and in pain, and can't show you.</p></header>
+
+      <div class="order">
+        <div><div class="L">1</div><h3>Sedation &amp; analgesia first</h3><p>Started <b>before</b> the NMBA and kept running the whole time it's on. Never let it lapse.</p></div>
+        <div><div class="L">2</div><h3>Artificial airway</h3><p>Every patient on an NMBA has one. No exceptions.</p></div>
+        <div><div class="L">3</div><h3>Vent rate set ≥ 8</h3><p>They can't take a breath on their own, so the ventilator needs a backup rate.</p></div>
+        <div><div class="L">4</div><h3>Eye protection</h3><p>Artificial tears and lubricant ordered. Lids closed. Corneal injury starts within the first 48 h.</p></div>
+        <div><div class="L">5</div><h3>Baseline TOF</h3><p>Find the stimulator setting <b>before</b> the infusion starts. You can't find it afterward. See 03.</p></div>
+      </div>
+      <p class="sub" style="margin-top:10px;font-size:14px"><span class="chip pol">SCU10-505</span> Items 1–5 are written policy requirements.</p>
+
+      <div class="callout">
+        <div class="ml">Your move</div>
+        <p>HR, BP, sweating and tearing are <strong>unreliable</strong> signs of pain under paralysis (SCCM 2016), but a sudden change is still a reason to <strong>check the sedation and analgesia infusions</strong> and call. Talk to the patient during care; they may remember it.</p>
+      </div>
+
+      <div class="block cards two">
+        <div class="card">
+          <h4>Care of the paralyzed patient</h4>
+          <ul>
+            <li>Frequent oral care and suctioning</li>
+            <li>DVT and GI prophylaxis, as ordered</li>
+            <li>Turns, skin checks, foot-drop prevention</li>
+            <li>PNS site cleaned and electrodes changed <b>daily</b></li>
+            <li>Plan positioning and range of motion with PT</li>
+            <li>Watch for unplanned extubation: secure the tube</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h4>Things that change the count</h4>
+          <ul>
+            <li>Electrolyte imbalances, BUN and creatinine can potentiate NMBAs: check baseline labs</li>
+            <li>Edema, hypothermia, sweating: weaker conduction</li>
+            <li>Hemiplegia or neuropathy: that limb doesn't represent the rest of the body</li>
+            <li>A different site or a different device</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="block callout navy">
+        <div class="ml">Deeper · SCCM 2026 &amp; 2016</div>
+        <p>In ARDS, an NMBA is suggested when the P/F ratio is under 150 and the patient stays hypoxemic or misses ventilation targets despite sedation. Duration usually <b>≤ 48 h</b>. SCCM suggests against using TOF <i>alone</i>: pair the count with the clinical picture (vent triggering, coughing, movement). A patient at 0/4 can still cough or trigger the vent.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 PLACEMENT ================= -->
+<section class="sec" id="place">
+  <div class="wrap sgrid">
+    <aside class="rail"><div class="in"><div class="eyebrow">Setup</div><div><div class="idx">02</div><i class="tick"></i></div></div></aside>
+    <div class="content">
+      <div class="cbar"></div>
+      <header class="chead"><h2>Electrode placement</h2><span class="pill">CORE</span><p class="thesis">You're stimulating a nerve, not a muscle. Two electrodes along the nerve, close together, then watch the one muscle that nerve drives.</p></header>
+
+      <div class="callout navy" style="margin-top:0">
+        <div class="ml">Every site</div>
+        <p>Clip hair if needed, clean with alcohol, <b>let it dry</b>. Two ECG electrodes along the nerve, as close together as possible. <b>Black (−) to distal, red (+) to proximal.</b> Mark the spots with a marker so the next nurse uses the same site.</p>
+      </div>
+
+      <div class="sites">
+        <article class="site">
+          <div class="art"><svg viewBox="0 0 300 170" role="img" aria-label="Palm-up forearm and hand with two electrodes along the ulnar nerve on the pinky side of the wrist">
+            <rect x="8" y="58" width="180" height="62" rx="14" fill="#fff" stroke="#333" stroke-width="2"/>
+            <path d="M186 52 h58 q14 0 14 14 v52 q0 14 -14 14 h-58 z" fill="#fff" stroke="#333" stroke-width="2"/>
+            <rect x="256" y="58" width="36" height="13" rx="6" fill="#fff" stroke="#333" stroke-width="2"/>
+            <rect x="256" y="76" width="40" height="13" rx="6" fill="#fff" stroke="#333" stroke-width="2"/>
+            <rect x="256" y="94" width="38" height="13" rx="6" fill="#fff" stroke="#333" stroke-width="2"/>
+            <rect x="256" y="112" width="30" height="13" rx="6" fill="#fff" stroke="#333" stroke-width="2"/>
+            <rect x="196" y="22" width="16" height="44" rx="8" transform="rotate(30 204 60)" fill="#fff" stroke="#333" stroke-width="2"/>
+            <line x1="188" y1="56" x2="188" y2="124" stroke="#999" stroke-dasharray="3 3"/>
+            <path d="M14 108 C80 110 140 110 250 118" fill="none" stroke="#DDBC68" stroke-width="3" stroke-dasharray="6 4"/>
+            <circle cx="172" cy="109" r="8" fill="#111"/><text x="172" y="113" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">−</text>
+            <circle cx="150" cy="109" r="8" fill="#990000"/><text x="150" y="113" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">+</text>
+            <text x="190" y="146" font-size="10" fill="#757575" font-family="Source Sans 3,sans-serif">wrist crease</text>
+            <text x="16" y="146" font-size="10" fill="#9A7B00" font-family="Source Sans 3,sans-serif" font-weight="700">ulnar nerve · pinky side</text>
+            <text x="222" y="18" font-size="10" fill="#00695C" font-family="Source Sans 3,sans-serif" font-weight="700">thumb</text>
+          </svg></div>
+          <div class="tx">
+            <h3>Ulnar nerve <span class="chip ok">First choice</span></h3>
+            <ol>
+              <li>Palm up, arm relaxed.</li>
+              <li>Distal (black) electrode over the ulnar nerve, <b>1–2 cm above the wrist crease</b> on the pinky side.</li>
+              <li>Proximal (red) electrode on the same line, as close as possible.</li>
+              <li>Can't isolate it at the wrist? One electrode on either side of the ulnar groove at the elbow.</li>
+            </ol>
+            <div class="watch"><b>Watch</b>Thumb <b style="display:inline;font:inherit;letter-spacing:0;text-transform:none">adducts</b> (pulls in toward the palm). Rest a fingertip on it.</div>
+            <div class="nope"><b>Don't count</b>Finger movement. That's the forearm muscle firing directly, not the nerve. It's artifact.</div>
+          </div>
+        </article>
+
+        <article class="site">
+          <div class="art"><svg viewBox="0 0 300 170" role="img" aria-label="Inner ankle with electrodes behind the medial malleolus, in the groove in front of the Achilles tendon">
+            <path d="M70 6 v104 q0 30 30 36 h150 q26 0 26 -16 q0 -14 -20 -18 l-96 -10 q-16 -4 -20 -24 v-72" fill="#fff" stroke="#333" stroke-width="2"/>
+            <circle cx="136" cy="112" r="11" fill="#F7F7F7" stroke="#333" stroke-width="1.5"/>
+            <path d="M74 20 q8 60 6 98" fill="none" stroke="#999" stroke-width="1.5"/>
+            <path d="M100 10 C102 70 100 110 112 128 C124 140 160 140 200 140" fill="none" stroke="#DDBC68" stroke-width="3" stroke-dasharray="6 4"/>
+            <circle cx="108" cy="118" r="8" fill="#111"/><text x="108" y="122" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">−</text>
+            <circle cx="104" cy="92" r="8" fill="#990000"/><text x="104" y="96" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">+</text>
+            <text x="152" y="160" font-size="10" fill="#757575" font-family="Source Sans 3,sans-serif">↑ medial malleolus</text>
+            <text x="8" y="70" font-size="10" fill="#757575" font-family="Source Sans 3,sans-serif">Achilles</text>
+            <text x="232" y="162" font-size="10" fill="#00695C" font-family="Source Sans 3,sans-serif" font-weight="700">great toe</text>
+          </svg></div>
+          <div class="tx">
+            <h3>Posterior tibial nerve <span class="chip">Backup</span></h3>
+            <ol>
+              <li>Electrodes <b>behind the medial malleolus</b>, in the groove between the ankle bone and the Achilles tendon.</li>
+              <li>Distal (black) lower, proximal (red) about 2 cm above it.</li>
+              <li>Good when the arms are edematous, lined, or wrapped.</li>
+            </ol>
+            <div class="watch"><b>Watch</b>Great toe plantar flexes (curls down).</div>
+            <div class="nope"><b>Not on</b>A paralyzed or partially paralyzed limb (any site).</div>
+          </div>
+        </article>
+
+        <article class="site">
+          <div class="art"><svg viewBox="0 0 300 170" role="img" aria-label="Side of face with one electrode lateral to the outer corner of the eye and one near the tragus of the ear">
+            <path d="M60 30 q90 -40 170 10 q30 30 26 70 q-4 40 -50 54 h-80 q-30 -6 -40 -30 l-14 -6 q6 -10 0 -18 l-10 -8 q8 -8 4 -16 q-14 -24 -6 -56z" fill="#fff" stroke="#333" stroke-width="2"/>
+            <path d="M86 70 q14 -10 28 0 q-14 8 -28 0z" fill="#F7F7F7" stroke="#333" stroke-width="1.5"/>
+            <path d="M196 70 q18 -6 22 14 q4 22 -14 30 q-8 -4 -6 -12 q8 -6 2 -14 z" fill="#F7F7F7" stroke="#333" stroke-width="1.5"/>
+            <path d="M196 92 C170 90 150 82 128 72" fill="none" stroke="#DDBC68" stroke-width="3" stroke-dasharray="6 4"/>
+            <circle cx="134" cy="72" r="8" fill="#111"/><text x="134" y="76" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">−</text>
+            <circle cx="184" cy="90" r="8" fill="#990000"/><text x="184" y="94" text-anchor="middle" fill="#fff" font-size="11" font-weight="700">+</text>
+            <text x="70" y="56" font-size="10" fill="#00695C" font-family="Source Sans 3,sans-serif" font-weight="700">eyelid · brow</text>
+            <text x="214" y="128" font-size="10" fill="#757575" font-family="Source Sans 3,sans-serif">tragus</text>
+          </svg></div>
+          <div class="tx">
+            <h3>Facial nerve <span class="chip fix">Last resort</span></h3>
+            <ol>
+              <li>Distal (black) electrode about <b>2 cm lateral to the outer corner of the eye</b>.</li>
+              <li>Proximal (red) electrode just in front of the <b>tragus</b> of the ear.</li>
+              <li>Use only when the other sites don't work.</li>
+            </ol>
+            <div class="watch"><b>Watch</b>Twitch of the eyelid and brow on the same side (orbicularis oculi).</div>
+            <div class="nope"><b>Why last</b>Facial muscles sit right under the electrodes and can twitch from direct stimulation, so the count can read <b style="display:inline;font:inherit;letter-spacing:0;text-transform:none">falsely high</b>.</div>
+          </div>
+        </article>
+      </div>
+      <div class="leadkey"><span><i style="background:#111"></i><b>Black · negative · distal</b></span><span><i style="background:#990000"></i><b>Red · positive · proximal</b></span><span><i style="background:#DDBC68"></i>Nerve path</span></div>
+
+      <div class="callout amber">
+        <div class="ml">Safety</div>
+        <p>Keep PNS leads away from <b>temporary pacing wires</b>: contact can trigger an arrhythmia. Check the skin under the electrodes every day for irritation or breakdown.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 THRESHOLD ================= -->
+<section class="sec" id="threshold">
+  <div class="wrap sgrid">
+    <aside class="rail"><div class="in"><div class="eyebrow">Baseline</div><div><div class="idx">03</div><i class="tick"></i></div></div></aside>
+    <div class="content">
+      <div class="cbar"></div>
+      <header class="chead"><h2>Finding the threshold</h2><span class="pill">CORE</span><p class="thesis">Find the setting before the drug goes in. After that, a drop in the count should mean the drug, not a weak stimulus.</p></header>
+
+      <div class="cards two">
+        <div class="card">
+          <div class="kicker">SCU10-505 · Baseline steps</div>
+          <ol class="steps-ol">
+            <li>PNS on, start at setting <b>1</b>.</li>
+            <li>Press <b>TOF</b>. Watch the right muscle (thumb, toe, or eyelid).</li>
+            <li>Step the output up until you see <b>4 strong twitches</b>.</li>
+            <li>Go <b>one setting higher</b>. That's your monitoring setting for the whole infusion.</li>
+            <li>Chart the baseline setting and the nerve site.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <div class="kicker">Why it works</div>
+          <p style="font-size:15px;color:var(--body-c)">At a low setting only some of the nerve fibers fire, so the twitches are weak. Turn it up and more fibers fire until all of them do and the twitch stops getting stronger. That's the <b>supramaximal</b> point. The extra step is a margin for changes in skin, edema, and electrode contact over the next shift.</p>
+          <p style="font-size:15px;color:var(--body-c)"><b>Higher isn't better.</b> Too much current fires the muscle directly (fingers jump) and can cause rhythmic nerve firing. It also hurts more.</p>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="kicker">Try it</div>
+        <h3>Dial it in.</h3>
+        <p class="sub">New patient, no paralytic yet, ulnar site. Start at 1, press TOF, step up until you see four strong thumb twitches, then <b>lock</b> the monitoring setting. Turn on <b>Hide the bars</b> to count by watching the thumb, the way you would at the bedside. This is a simplified teaching model.</p>
+        <div class="pns" id="simA">
+          <div class="stage">
+            <svg class="hand" viewBox="0 0 460 250" aria-hidden="true"></svg>
+            <div class="tw"><div><span>1</span><i></i></div><div><span>2</span><i></i></div><div><span>3</span><i></i></div><div><span>4</span><i></i></div></div>
+            <div class="read" aria-live="polite"><span class="r1">Press TOF.</span><span class="r2"></span></div>
+            <div class="device">
+              <div><span class="dl">Output</span><div style="display:flex;gap:6px;align-items:center"><button class="adj dn" aria-label="Lower setting">−</button><div class="dial">1</div><button class="adj up" aria-label="Raise setting">+</button></div></div>
+              <button class="go">TOF</button>
+              <span class="bat">BATT OK</span>
+            </div>
+          </div>
+          <div class="ctl">
+            <div class="lv">Patient</div>
+            <div class="btnrow" style="margin-top:0"><button class="mbtn" data-a="new">New patient</button><button class="mbtn" data-a="blind" aria-pressed="false">Hide the bars</button></div>
+            <div class="lv">When you're there</div>
+            <button class="mbtn prob" data-a="lock" style="width:100%">Lock this as the monitoring setting</button>
+            <div class="fb2" aria-live="polite">Settings tried: none yet.</div>
+            <p class="sub" style="font-size:13px;margin-top:12px">Every patient's threshold is different. "New patient" picks a new one.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block callout navy">
+        <div class="ml">Deeper · Lippincott 2026 (mA devices)</div>
+        <p>On a stimulator that reads in milliamps, Lippincott describes the same idea in numbers: start at <b>5 mA</b>, go up <b>5 mA</b> at a time until you get 4 twitches, then keep going 5 mA at a time until the twitches stop getting stronger. The supramaximal setting is where four vigorous twitches first appeared. Same logic as SCU10-505, different dial. <span class="chip pol">SCU10-505</span> governs at Keck.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 COUNT ================= -->
+<section class="sec" id="count">
+  <div class="wrap sgrid">
+    <aside class="rail"><div class="in"><div class="eyebrow">Interpretation</div><div><div class="idx">04</div><i class="tick"></i></div></div></aside>
+    <div class="content">
+      <div class="cbar"></div>
+      <header class="chead"><h2>Reading the count</h2><span class="pill">CORE</span><p class="thesis">Fewer twitches means more receptors blocked. Aim for 1 or 2 of 4, and check it against what the patient is doing.</p></header>
+
+      <div class="count">
+        <div class="under"><div class="n">4<small>/4</small></div><div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i></div><div class="blk">&lt; 75% blocked</div><div class="act">Under goal. <span class="chip rn">RN</span> Increase per the titration order, recheck in 10–15 min.</div></div>
+        <div class="under"><div class="n">3<small>/4</small></div><div class="dots"><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div><div class="blk">≈ 75% blocked</div><div class="act">Under goal. Same: increase per order, recheck in 10–15 min.</div></div>
+        <div class="goal"><div class="n">2<small>/4</small></div><div class="dots"><i class="on"></i><i class="on"></i><i></i><i></i></div><div class="blk">≈ 80% blocked</div><div class="act">At goal. Continue the current rate.</div></div>
+        <div class="goal"><div class="n">1<small>/4</small></div><div class="dots"><i class="on"></i><i></i><i></i><i></i></div><div class="blk">≈ 90% blocked</div><div class="act">At goal. Continue the current rate.</div></div>
+        <div class="over"><div class="n">0<small>/4</small></div><div class="dots"><i></i><i></i><i></i><i></i></div><div class="blk">≈ 100% blocked</div><div class="act"><b>Troubleshoot first</b> (05). Then hold or reduce per order and recheck in 10–15 min.</div></div>
+      </div>
+      <p class="sub" style="font-size:13px;margin-top:8px">Goal of 1–2/4 from Lippincott (2026) and AACN. Use the provider's order if it sets a different target. SCU10-505 doesn't set a target.</p>
+
+      <div class="block">
+        <div class="kicker">Try it</div>
+        <h3>Count it like the bedside.</h3>
+        <p class="sub">Monitoring setting is already locked. Press TOF, watch the thumb, then pick the count. Bars are hidden, so you have to count the thumb.</p>
+        <div class="pns blind" id="simB">
+          <div class="stage">
+            <svg class="hand" viewBox="0 0 460 250" aria-hidden="true"></svg>
+            <div class="tw"><div><span>1</span><i></i></div><div><span>2</span><i></i></div><div><span>3</span><i></i></div><div><span>4</span><i></i></div></div>
+            <div class="read" aria-live="polite"><span class="r1">Press TOF.</span><span class="r2"></span></div>
+            <div class="device">
+              <div><span class="dl">Output · locked</span><div class="dial">6</div></div>
+              <button class="go">TOF</button>
+              <span class="bat">BATT OK</span>
+            </div>
+          </div>
+          <div class="ctl">
+            <div class="lv">How many twitches?</div>
+            <div class="btnrow" style="margin-top:0" id="cntBtns"></div>
+            <div class="fb2" aria-live="polite">Watch the thumb, then answer.</div>
+            <div class="btnrow"><button class="mbtn" data-a="next">Next patient</button><button class="mbtn" data-a="show" aria-pressed="false">Show bars</button></div>
+            <p class="sub score" style="font-size:13px;margin-top:10px"></p>
+          </div>
+        </div>
+      </div>
+
+      <div class="block cards">
+        <div class="card"><h4>Timing</h4><div class="big">10–15 min</div><p>Recheck after a bolus or any rate change. Once stable at goal, check every 4–8 h; Keck charts <b>q4h and PRN</b>.</p></div>
+        <div class="card"><h4>Fade hides</h4><div class="big">4/4 ≠ strong</div><p>Eyes and fingertips can't feel fade once the TOF ratio is above about 0.4. A full count doesn't mean full strength.</p></div>
+        <div class="card"><h4>Count + patient</h4><div class="big">0/4 &amp; coughing?</div><p>Trust the patient. Triggering the vent or moving at 0/4 means the count isn't telling the whole story.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 TROUBLE ================= -->
+<section class="sec" id="trouble">
+  <div class="wrap sgrid">
+    <aside class="rail"><div class="in"><div class="eyebrow">At the bedside</div><div><div class="idx">05</div><i class="tick"></i></div></div></aside>
+    <div class="content">
+      <div class="cbar"></div>
+      <header class="chead"><h2>Troubleshooting 0/4</h2><span class="pill">CORE</span><p class="thesis">A dead battery looks exactly like a deep block. Fix the equipment before you change the drug.</p></header>
+
+      <div class="cards two">
+        <div class="card">
+          <div class="kicker">SCU10-505 · In this order</div>
+          <ol class="steps-ol">
+            <li>Check the <b>battery</b> in the PNS.</li>
+            <li><b>Cleanse</b> the site and <b>change the electrodes</b>.</li>
+            <li><b>Reposition</b> the electrodes.</li>
+            <li><b>Change the polarity</b> of the leads.</li>
+            <li><b>Increase the setting</b>, up to the highest.</li>
+            <li><b>Retest another nerve.</b></li>
+            <li>Still nothing <b>and</b> no spontaneous movement or vent triggering? <span class="chip prov">Call</span> the provider.</li>
+          </ol>
+        </div>
+        <div class="card">
+          <div class="kicker">Also check</div>
+          <ul>
+            <li>Lead wires snapped on at both ends</li>
+            <li>Gel pads dried out or lifting (edema, sweat, diaphoresis)</li>
+            <li>Same site and setting as the last check (read the chart)</li>
+            <li>The infusion: rate, concentration, recent bolus</li>
+          </ul>
+          <p style="font-size:14.5px;margin-top:12px">Once the device is cleared and it's a true 0/4: <span class="chip rn">RN</span> hold or reduce <b>per order</b>, recheck in 10–15 min, and notify.</p>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="kicker">Try it</div>
+        <h3>Find the cause.</h3>
+        <p class="sub">Your patient has been 2/4 at setting 6 all shift. The 0400 check reads 0/4. Something is hiding. Work it out in as few steps as you can.</p>
+        <div class="tsg" id="tsg">
+          <div>
+            <div class="now">TOF now<b id="tsgNow">0/4</b></div>
+            <div class="lv" style="font:700 11px var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin:18px 0 8px">Your next step</div>
+            <div class="opts" id="tsgOpts"></div>
+            <div class="btnrow"><button class="mbtn" id="tsgNew">New 0400 check</button></div>
+          </div>
+          <div>
+            <h4>What happened</h4>
+            <ul class="tlog" id="tsgLog" aria-live="polite"><li>Pick a step.</li></ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="kicker">After the drip is off</div>
+        <h3>Is the block wearing off?</h3>
+        <p class="sub">When sedation allows, the patient should be able to do these. <span class="chip pol">SCU10-505</span></p>
+        <div class="rev">
+          <div><h4>Count</h4><div class="big">4/4</div><p>All four twitches back.</p></div>
+          <div><h4>Head lift</h4><div class="big">&gt; 5 s</div><p>Holds the head up.</p></div>
+          <div><h4>Eyes</h4><div class="big">&gt; 5 s</div><p>Opens eyes wide and holds.</p></div>
+          <div><h4>Tongue</h4><div class="big">&gt; 5 s</div><p>Sticks the tongue out and holds.</p></div>
+        </div>
+        <div class="callout amber">
+          <div class="ml">Know the limit</div>
+          <p>A bedside PNS <b>can't</b> confirm the patient is strong enough to breathe on their own or be extubated. That takes a quantitative monitor (TOF ratio ≥ 0.9) and the RT and provider's weaning assessment.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 06 STATION ================= -->
+<section class="sec" id="station">
+  <div class="wrap sgrid">
+    <aside class="rail"><div class="in"><div class="eyebrow">Hands-on</div><div><div class="idx">06</div><i class="tick"></i></div></div></aside>
+    <div class="content">
+      <div class="cbar"></div>
+      <header class="chead"><h2>Hands-on station</h2><span class="pill stretch">DEEPER</span><p class="thesis">Volunteers only. An awake person always shows 4/4, so this is where you practice the setup: placement, threshold, the right muscle, and fixing faults.</p></header>
+
+      <div class="callout" style="margin-top:0">
+        <div class="ml">Ground rules · Non-negotiable</div>
+        <p><b>TOF mode only.</b> Never tetanic, double-burst, or a single high-current pulse on an awake person: it's painful. Start every test at setting 1. Both electrodes on the same limb (or same side of the face). Leads never cross the chest. Anyone can stop at any time, no reason needed.</p>
+      </div>
+
+      <div class="block">
+        <div class="kicker">Read aloud first</div>
+        <div class="script">
+          <p class="say">"This stimulator sends four small pulses to a nerve. It feels like tingling or a tap, and your thumb or toe may jump. It isn't dangerous, but it can be uncomfortable. Being a volunteer is completely optional, and you can say stop at any time.</p>
+          <p class="say">Please sit this one out, no explanation needed, if any of these apply: a pacemaker, ICD, or other implanted stimulator; a nerve injury or neuropathy in that arm or leg; broken skin, a rash, or a recent injury where the pads go; you're pregnant; or you'd simply rather not."</p>
+          <p style="font-size:14px;color:var(--ink-3);margin:0">Get a clear verbal yes before placing electrodes. For the facial site, ask again; keep pads off the eyelid and stop if there's any eye discomfort.</p>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="kicker">Groups of three · Rotate so everyone operates</div>
+        <div class="roles">
+          <div><div class="L">O</div><h3>Operator</h3><p>Runs the checklist out loud: screens, places, finds the threshold, troubleshoots.</p></div>
+          <div><div class="L">V</div><h3>Volunteer</h3><p>Optional role. Says what they feel. Says stop when they want to.</p></div>
+          <div><div class="L">C</div><h3>Checker</h3><p>Holds this sheet, ticks each step, watches for finger-vs-thumb mistakes, gives feedback.</p></div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="kicker">Checker's sheet</div>
+        <ul class="checks">
+          <li>Screened the volunteer and got a verbal yes</li>
+          <li>Cleaned the site with alcohol and let it dry</li>
+          <li>Two electrodes along the ulnar nerve, close together</li>
+          <li>Black (−) distal, red (+) proximal</li>
+          <li>Device in TOF mode, started at setting 1</li>
+          <li>Watched the thumb, not the fingers</li>
+          <li>Stepped up to 4 strong twitches, then +1</li>
+          <li>Stated the baseline setting out loud</li>
+          <li>Said it like a chart entry: site, setting, count</li>
+          <li>Found and fixed a planted fault</li>
+          <li>Repeated at the posterior tibial (great toe)</li>
+          <li>Facial site, only if the volunteer agreed again</li>
+          <li>Removed electrodes, checked the skin</li>
+          <li>Wiped the PNS with approved disinfectant</li>
+        </ul>
+        <div class="signrow"><div>Operator</div><div>Checker</div><div>Date</div></div>
+      </div>
+
+      <div class="block">
+        <div class="kicker">Facilitator · Fault cards</div>
+        <p class="sub">Plant one per round while the operator looks away. The operator should find it using the SCU10-505 order.</p>
+        <div class="faults">
+          <div class="fcard"><div class="k">Fault 1</div><h3>Dead battery</h3><p>Swap in a dead battery, or flip one so it doesn't connect.</p><div class="fix"><b>Found at:</b> step 1, battery check.</div></div>
+          <div class="fcard"><div class="k">Fault 2</div><h3>Dry electrode</h3><p>Use an old, dried-out pad, or slip a piece of tape under one pad.</p><div class="fix"><b>Found at:</b> step 2, cleanse and change electrodes.</div></div>
+          <div class="fcard"><div class="k">Fault 3</div><h3>Wrong spot</h3><p>Move the pads to the middle of the forearm.</p><div class="fix"><b>Clue:</b> fingers twitch, the thumb doesn't. <b>Fix:</b> step 3, reposition.</div></div>
+          <div class="fcard"><div class="k">Fault 4</div><h3>Leads reversed</h3><p>Swap black and red.</p><div class="fix"><b>Clue:</b> weaker twitches at the same setting. <b>Fix:</b> step 4, change polarity.</div></div>
+          <div class="fcard"><div class="k">Fault 5</div><h3>Lead unsnapped</h3><p>Leave one lead loose on its snap.</p><div class="fix"><b>Clue:</b> nothing at any setting. <b>Fix:</b> check connections.</div></div>
+          <div class="fcard"><div class="k">Fault 6</div><h3>Dial left high</h3><p>Leave the device at a high setting from the last group.</p><div class="fix"><b>Catch:</b> operator should reset to 1 before the first pulse. Talk through what too much current does.</div></div>
+        </div>
+      </div>
+      <button class="mbtn prbtn" id="printStation">Print this station sheet</button>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 07 CASES ================= -->
+<section class="sec" id="cases">
+  <div class="wrap sgrid">
+    <aside class="rail"><div class="in"><div class="eyebrow">Practice</div><div><div class="idx">07</div><i class="tick"></i></div></div></aside>
+    <div class="content">
+      <div class="cbar"></div>
+      <header class="chead"><h2>Cases</h2><span class="pill stretch">DEEPER</span><p class="thesis">Three patients, three counts. Pick your next move.</p></header>
+      <div id="caseHost"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 08 POLICY ================= -->
+<section class="sec" id="policy">
+  <div class="wrap sgrid">
+    <aside class="rail"><div class="in"><div class="eyebrow">Keck policy</div><div><div class="idx">08</div><i class="tick"></i></div></div></aside>
+    <div class="content">
+      <div class="cbar"></div>
+      <header class="chead"><h2>SCU10-505 crosswalk</h2><span class="pill">CORE</span><p class="thesis">This page teaches from the policy. Open the policy itself (Keck sign-in) when you need the exact wording.</p></header>
+      <p><a class="polink" data-pol="SCU10-505" href="#">SCU10-505 · Special Care Units: Monitoring Degree of Neuromuscular Blockade with Peripheral Nerve Stimulation ↗</a></p>
+      <div class="polgrid">
+        <div><h3>Who gets monitored</h3><p>Every patient on an NMBA, with an artificial airway, on the vent at a set rate of 8 or more.</p></div>
+        <div><h3>Sedation &amp; eyes</h3><p>Analgesia and sedation started before the NMBA and continued throughout. Artificial tears and eye lubricant ordered.</p></div>
+        <div><h3>Site care &amp; equipment</h3><p>Site cleaned and electrodes changed daily. PNS disinfected between patients by whoever used it.</p></div>
+        <div><h3>Baseline</h3><p>Setting 1 → up to 4 strong twitches → one higher. Done before the infusion starts.</p></div>
+        <div><h3>Documentation</h3><p>Patient and family education; baseline setting and site; TOF response, site, and setting <b>q4h and PRN</b> unless ordered otherwise.</p></div>
+        <div><h3>Reversal</h3><p>4/4 back, plus head lift, wide eye opening, and tongue protrusion each held more than 5 seconds.</p></div>
+      </div>
+
+      <div class="block">
+        <div class="kicker">Where the sources differ</div>
+        <div class="tscroll"><table class="tbl diff">
+          <thead><tr><th>Topic</th><th>SCU10-505 (Keck)</th><th>Lippincott 2026 / AACN</th><th>SCCM 2016 / 2026</th></tr></thead>
+          <tbody>
+            <tr><td>Finding the setting</td><td>Setting 1, up to 4 strong, then +1</td><td>5 mA steps to supramaximal</td><td>Not specified</td></tr>
+            <tr><td>Twitch goal</td><td>Not stated</td><td>1–2 of 4</td><td>No target; TOF plus clinical picture</td></tr>
+            <tr><td>Recheck timing</td><td>q4h &amp; PRN</td><td>10–15 min after a change; q4–8h when stable</td><td>Not specified</td></tr>
+            <tr><td>Facial lead polarity</td><td>Black distal (near the eye)</td><td>Black near the tragus</td><td>—</td></tr>
+            <tr><td>Monitoring at all</td><td>Required</td><td>Recommended</td><td>2026: fixed dose or titrated, either acceptable</td></tr>
+          </tbody>
+        </table></div>
+        <p class="sub" style="font-size:13px;margin-top:8px">Where they differ, follow SCU10-505 and the provider's order. If the facial site won't respond, swapping polarity is step 4 anyway.</p>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <div class="grid">
+      <div>
+        <div class="sig">Counting the Twitch</div>
+        <p style="margin-top:12px">Train-of-four &amp; neuromuscular blockade reference for ICU nurses · Keck Medicine of USC<br>Nursing Professional Development &amp; Education, Critical Care</p>
+        <p>Scott Brickner, MSN, RN, CCRN<br>NPD Practitioner, Critical Care</p>
+      </div>
+      <div>
+        <h4>Keck policy reviewed</h4>
+        <ol>
+          <li>SCU10-505 Monitoring Degree of Neuromuscular Blockade with Peripheral Nerve Stimulation (rev. 09/23/2025)</li>
+        </ol>
+      </div>
+      <div>
+        <h4>Evidence</h4>
+        <ol>
+          <li>Lippincott Procedures. Peripheral nerve stimulation. Revised April 21, 2026.</li>
+          <li>Gunter EP. Peripheral nerve stimulator: train-of-four monitoring. In: Johnson KL, ed. <i>AACN Procedure Manual for Progressive and Critical Care.</i> 8th ed. Elsevier; 2024.</li>
+          <li>Murray MJ, DeBlock H, Erstad B, et al. Clinical practice guidelines for sustained neuromuscular blockade in the adult critically ill patient. <i>Crit Care Med.</i> 2016;44(11):2079–2103.</li>
+          <li>Erstad BL, Cobas MA, Qadir N, et al. SCCM guidelines for the administration of neuromuscular blockade in adults with ARDS. <i>Crit Care Med.</i> 2026;54(3):634–643.</li>
+          <li>Brull SJ, Kopman AF. Current status of neuromuscular reversal and monitoring. <i>Anesthesiology.</i> 2017;126(1):173–190.</li>
+          <li>Naguib M, Brull SJ, Kopman AF, et al. Consensus statement on perioperative use of neuromuscular monitoring. <i>Anesth Analg.</i> 2018;127(1):71–80.</li>
+        </ol>
+      </div>
+    </div>
+    <div class="fine"><span style="letter-spacing:.1em;text-transform:uppercase;font-weight:700">Keck Medicine of USC · Train-of-Four</span><span>Educational resource. Simulations are simplified teaching models. Follow Keck policy and provider orders; policy governs where this page differs.</span><span>v1.0 · November 2026</span></div>
+  </div>
+</footer>
+<script>
+(function(){
+"use strict";
+/* ---------- author config: Keck policy link (SharePoint, Keck sign-in) ---------- */
+const POLICY_LINKS={
+  "SCU10-505":"" /* TODO: paste SharePoint URL for SCU10-505 */
+};
+document.querySelectorAll('a.polink').forEach(a=>{
+  const u=POLICY_LINKS[a.dataset.pol];
+  if(u){a.href=u;a.target="_blank";a.rel="noopener";}
+  else if(a.getAttribute('href')==='#'){a.href='#policy';}
+});
+const reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $=(s,r)=>(r||document).querySelector(s), $$=(s,r)=>[...(r||document).querySelectorAll(s)];
+const rnd=(a,b)=>a+Math.floor(Math.random()*(b-a+1));
+
+/* ---------- nav drawer + active section ---------- */
+const drawer=$('#drawer'),burger=$('.burger');
+function setDrawer(o){drawer.classList.toggle('open',o);drawer.setAttribute('aria-hidden',String(!o));burger.setAttribute('aria-expanded',String(o));if(o)$('.close',drawer).focus();}
+burger.addEventListener('click',()=>setDrawer(true));
+$('.close',drawer).addEventListener('click',()=>setDrawer(false));
+$('.scrim',drawer).addEventListener('click',()=>setDrawer(false));
+$$('nav a',drawer).forEach(a=>a.addEventListener('click',()=>setDrawer(false)));
+document.addEventListener('keydown',e=>{if(e.key==='Escape')setDrawer(false);});
+const navLinks=$$('.topnav a');
+if('IntersectionObserver' in window){
+  const io=new IntersectionObserver(es=>{es.forEach(en=>{if(en.isIntersecting){navLinks.forEach(a=>a.classList.toggle('active',a.getAttribute('href')==='#'+en.target.id));}});},{rootMargin:'-40% 0px -55% 0px'});
+  $$('section.sec').forEach(s=>io.observe(s));
+}
+
+/* =====================================================================
+   PNS stage: palm-up hand, thumb adducts on each pulse
+   ===================================================================== */
+const HAND=`
+<defs><linearGradient id="skin" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2A333D"/><stop offset="1" stop-color="#1A2027"/></linearGradient></defs>
+<rect x="0" y="112" width="214" height="86" rx="20" fill="url(#skin)" stroke="#8C96A3" stroke-width="2"/>
+<path d="M206 100 h104 q20 0 20 20 v74 q0 20 -20 20 h-104 z" fill="url(#skin)" stroke="#8C96A3" stroke-width="2"/>
+<g class="fingers">
+  <rect x="326" y="104" width="96" height="22" rx="11" fill="url(#skin)" stroke="#8C96A3" stroke-width="2"/>
+  <rect x="326" y="132" width="110" height="22" rx="11" fill="url(#skin)" stroke="#8C96A3" stroke-width="2"/>
+  <rect x="326" y="160" width="104" height="22" rx="11" fill="url(#skin)" stroke="#8C96A3" stroke-width="2"/>
+  <rect x="326" y="188" width="84" height="20" rx="10" fill="url(#skin)" stroke="#8C96A3" stroke-width="2"/>
+</g>
+<g class="thumb"><rect x="226" y="16" width="26" height="96" rx="13" fill="url(#skin)" stroke="#8C96A3" stroke-width="2" transform="rotate(32 239 108)"/></g>
+<path d="M10 186 C90 188 160 190 300 200" fill="none" stroke="#DDBC68" stroke-width="2" stroke-dasharray="6 5" opacity=".6"/>
+<circle class="zap" cx="196" cy="188" r="20" fill="#FFCC00" opacity="0"/>
+<circle cx="196" cy="188" r="10" fill="#07090B" stroke="#C9D1DB" stroke-width="2"/><text x="196" y="192" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">−</text>
+<circle cx="168" cy="188" r="10" fill="#990000" stroke="#C9D1DB" stroke-width="2"/><text x="168" y="192" text-anchor="middle" fill="#fff" font-size="12" font-weight="700">+</text>
+<path d="M196 198 C196 230 180 244 150 250 M168 198 C168 226 150 240 120 250" fill="none" stroke="#6D7784" stroke-width="2"/>
+<text x="250" y="26" fill="#8C96A3" font-size="12" font-family="Source Sans 3,sans-serif" font-weight="700">THUMB</text>
+<text x="16" y="232" fill="#6D7784" font-size="11" font-family="Source Sans 3,sans-serif">ulnar site · palm up</text>`;
+
+function Stage(root){
+  this.root=root;this.svg=$('svg.hand',root);this.svg.innerHTML=HAND;
+  this.thumb=$('.thumb',this.svg);this.fingers=$('.fingers',this.svg);this.zap=$('.zap',this.svg);
+  this.bars=$$('.tw i',root);this.r1=$('.r1',root);this.r2=$('.r2',root);this.go=$('.go',root);
+  this.thumb.style.transformOrigin='239px 108px';this.thumb.style.transition='transform 90ms ease-out';
+  this.fingers.style.transformOrigin='326px 160px';this.fingers.style.transition='transform 90ms ease-out';
+}
+/* amps: 4 numbers 0..1 ; art: finger artifact */
+Stage.prototype.fire=function(amps,art){
+  const self=this;
+  return new Promise(res=>{
+    self.go.disabled=true;self.bars.forEach(b=>b.style.height='0');self.r1.textContent='Stimulating…';self.r2.textContent='';
+    const gap=reduce?380:500;
+    amps.forEach((a,k)=>{
+      setTimeout(()=>{
+        self.zap.setAttribute('opacity','.55');
+        if(a>0){self.thumb.style.transform='rotate('+(a*26)+'deg)';}
+        if(art){self.fingers.style.transform='scaleX(.9) translateY(4px)';}
+        self.bars[k].style.height=Math.round(a*100)+'%';
+        setTimeout(()=>{self.zap.setAttribute('opacity','0');self.thumb.style.transform='rotate(0deg)';self.fingers.style.transform='none';},170);
+      },k*gap+120);
+    });
+    setTimeout(()=>{self.go.disabled=false;res();},3*gap+520);
+  });
+};
+function strengthWord(a){return a>=.95?'strong':a>=.5?'moderate':a>0?'faint':'none';}
+
+/* =====================================================================
+   03 · threshold finder
+   ===================================================================== */
+(function(){
+  const root=$('#simA'),st=new Stage(root),dialEl=$('.dial',root),fb=$('.fb2',root);
+  let T,dial,tried;
+  function reset(){T=rnd(3,6);dial=1;tried=[];dialEl.textContent=dial;st.r1.textContent='Press TOF.';st.r2.textContent='';fb.className='fb2';fb.textContent='Settings tried: none yet.';st.bars.forEach(b=>b.style.height='0');}
+  function resp(d){
+    if(d<T-2)return{amps:[0,0,0,0],art:false};
+    const a=d===T-2?.25:d===T-1?.55:1;
+    return{amps:[a,a,a,a],art:d>=T+4};
+  }
+  function setDial(n){dial=Math.max(1,Math.min(10,n));dialEl.textContent=dial;}
+  $('.dn',root).addEventListener('click',()=>setDial(dial-1));
+  $('.up',root).addEventListener('click',()=>setDial(dial+1));
+  st.go.addEventListener('click',async()=>{
+    const r=resp(dial);await st.fire(r.amps,r.art);
+    const n=r.amps.filter(x=>x>0).length;
+    st.r1.innerHTML=n?'<b>'+n+'</b> twitches · '+strengthWord(r.amps[0]):'<b>0</b> no thumb movement';
+    st.r2.innerHTML=r.art?'<span class="art">Fingers jumping too: direct muscle stimulation. Too much current.</span>':'';
+    if(!tried.includes(dial))tried.push(dial);
+    fb.className='fb2';fb.textContent='Settings tried: '+tried.sort((a,b)=>a-b).join(', ')+'.';
+  });
+  root.addEventListener('click',e=>{
+    const b=e.target.closest('[data-a]');if(!b)return;
+    if(b.dataset.a==='new')reset();
+    if(b.dataset.a==='blind'){const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);root.classList.toggle('blind',on);}
+    if(b.dataset.a==='lock'){
+      const d=dial;
+      if(d<T){fb.className='fb2 bad';fb.innerHTML='<b>Not there yet.</b> At '+d+' the twitches aren\'t four strong ones. Keep stepping up.';}
+      else if(d===T){fb.className='fb2 warn';fb.innerHTML='<b>Close.</b> '+T+' is where four strong twitches first appear. SCU10-505 says go <b>one higher</b> for margin. Lock '+(T+1)+'.';}
+      else if(d===T+1){fb.className='fb2 good';fb.innerHTML='<b>Locked at '+d+'.</b> Four strong twitches first appeared at '+T+', plus one. Chart it: <i>baseline setting '+d+', ulnar.</i> Try "New patient": the threshold moves.';}
+      else if(d===T+2){fb.className='fb2 warn';fb.innerHTML='<b>Works, but high.</b> Four strong appeared at '+T+'. Policy is that plus one ('+(T+1)+'). Extra current just means more discomfort.';}
+      else{fb.className='fb2 bad';fb.innerHTML='<b>Too high.</b> Four strong appeared at '+T+'. At '+d+' you risk firing the muscle directly and miscounting. Back down to '+(T+1)+'.';}
+    }
+  });
+  reset();
+})();
+
+/* =====================================================================
+   04 · count drill
+   ===================================================================== */
+(function(){
+  const root=$('#simB'),st=new Stage(root),fb=$('.fb2',root),score=$('.score',root),host=$('#cntBtns');
+  const ACT={4:'Under goal: increase per the titration order, recheck in 10–15 min.',3:'Under goal: increase per order, recheck in 10–15 min.',2:'At goal: continue the current rate.',1:'At goal: continue the current rate.',0:'Troubleshoot the equipment first (05). Then hold or reduce per order, recheck in 10–15 min.'};
+  let c,fired,answered,right=0,total=0;
+  for(let n=0;n<=4;n++){const b=document.createElement('button');b.className='mbtn';b.textContent=n+'/4';b.dataset.n=n;host.appendChild(b);}
+  function ampsFor(n){const f=[1,.8,.6,.45];return [0,1,2,3].map(i=>i<n?f[i]:0);}
+  function next(){c=rnd(0,4);fired=false;answered=false;st.r1.textContent='Press TOF.';st.r2.textContent='';st.bars.forEach(b=>b.style.height='0');fb.className='fb2';fb.textContent='Watch the thumb, then answer.';$$('button',host).forEach(b=>{b.disabled=false;b.className='mbtn';});}
+  st.go.addEventListener('click',async()=>{await st.fire(ampsFor(c),false);fired=true;st.r1.textContent='How many did you see?';});
+  host.addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b||answered)return;
+    if(!fired){fb.className='fb2 warn';fb.textContent='Press TOF first.';return;}
+    answered=true;total++;const n=+b.dataset.n;
+    $$('button',host).forEach(x=>{x.disabled=true;if(+x.dataset.n===c)x.className='mbtn hit';});
+    if(n===c){right++;fb.className='fb2 good';fb.innerHTML='<b>'+c+'/4.</b> '+ACT[c];}
+    else{b.className='mbtn miss';fb.className='fb2 bad';fb.innerHTML='<b>It was '+c+'/4.</b> '+(c?'Later twitches fade and get small; rest a fingertip on the thumb. ':'No thumb movement at all. ')+ACT[c];}
+    score.textContent=right+' of '+total+' counted right.';
+  });
+  root.addEventListener('click',e=>{const b=e.target.closest('[data-a]');if(!b)return;
+    if(b.dataset.a==='next')next();
+    if(b.dataset.a==='show'){const on=b.getAttribute('aria-pressed')!=='true';b.setAttribute('aria-pressed',on);root.classList.toggle('blind',!on);}
+  });
+  /* hit/miss button colors */
+  const s=document.createElement('style');s.textContent='#cntBtns .mbtn.hit{background:var(--green);border-color:var(--green);color:#fff}#cntBtns .mbtn.miss{background:var(--cardinal-tint);border-color:var(--cardinal);color:var(--cardinal)}#cntBtns .mbtn:disabled{cursor:default}';document.head.appendChild(s);
+  next();
+})();
+
+/* =====================================================================
+   05 · troubleshooting game
+   ===================================================================== */
+(function(){
+  const opts=$('#tsgOpts'),log=$('#tsgLog'),now=$('#tsgNow');
+  const STEPS=[
+    ['bat','1 · Check the battery'],
+    ['pads','2 · Cleanse site, change electrodes'],
+    ['pos','3 · Reposition the electrodes'],
+    ['pol','4 · Change lead polarity'],
+    ['up','5 · Increase the setting'],
+    ['nerve','6 · Retest another nerve'],
+    ['clin','Check for movement / vent triggering'],
+    ['call','Notify the provider'],
+    ['drip','Reduce or hold the infusion now']
+  ];
+  const FIX={battery:'bat',dry:'pads',place:'pos',polarity:'pol'};
+  let cause,used,done;
+  function add(cls,html){if(log.firstElementChild&&log.firstElementChild.textContent==='Pick a step.')log.innerHTML='';const li=document.createElement('li');li.className=cls;li.innerHTML=html;log.appendChild(li);}
+  function start(){
+    cause=['battery','dry','place','polarity','block','block'][rnd(0,5)];used=[];done=false;now.textContent='0/4';log.innerHTML='<li>Pick a step.</li>';
+    opts.innerHTML='';STEPS.forEach(([k,t])=>{const b=document.createElement('button');b.className='mbtn';b.dataset.k=k;b.textContent=t;opts.appendChild(b);});
+  }
+  function win(msg){done=true;now.textContent=cause==='block'?'0/4 · true':'2/4';add('good','<b>Solved in '+used.length+' step'+(used.length>1?'s':'')+'.</b> '+msg);$$('button',opts).forEach(b=>b.disabled=true);}
+  opts.addEventListener('click',e=>{
+    const b=e.target.closest('button');if(!b||done)return;const k=b.dataset.k;
+    if(!used.includes(k))used.push(k);b.classList.add('done');
+    const eq=cause!=='block';
+    if(eq&&FIX[cause]===k){b.className='mbtn hit';
+      const why={battery:'Battery was dead. New battery, TOF 2/4. Nothing was wrong with the drug.',dry:'The gel was dry and lifting. Fresh electrodes on a clean site: 2/4.',place:'The pads had slid off the nerve line. Repositioned over the ulnar nerve: 2/4.',polarity:'Leads were on backward. Black distal, red proximal: 2/4.'}[cause];
+      win(why);return;}
+    switch(k){
+      case 'bat':add('','Battery indicator OK. Still 0/4.');break;
+      case 'pads':add('','Fresh electrodes on a clean, dry site. Still 0/4.');break;
+      case 'pos':add('','Repositioned along the ulnar nerve. Still 0/4.');break;
+      case 'pol':add('','Polarity swapped. Still 0/4. Swap it back.');break;
+      case 'up':add('warn',eq?'Up to 10: one faint twitch. That\'s a conduction problem, not the drug. Keep checking equipment.':'Up to 10. Still 0/4.');break;
+      case 'nerve':add(eq?'warn':'',eq?'Posterior tibial at baseline: 2/4. The patient is fine; the problem is at the arm. Go back and find it.':'Posterior tibial: 0/4 there too.');break;
+      case 'clin':add('',eq?'Patient occasionally triggering the vent. Doesn\'t fit a true 0/4. Recheck your equipment.':'No spontaneous movement, not triggering the vent, no cough with suctioning.');break;
+      case 'call':
+        if(!eq&&used.includes('nerve')&&used.includes('clin')){b.className='mbtn hit';win('True deep block: device cleared, second nerve 0/4, no clinical movement. Provider notified; <b>hold or reduce per order</b>, recheck TOF in 10–15 min, and check sedation is still running.');return;}
+        add('warn','The provider asks: "Did you check the device and another nerve? Is the patient moving or triggering the vent?" Finish the checks first.');break;
+      case 'drip':b.className='mbtn miss';
+        add('bad',eq?'<b>Hold that.</b> A device problem looks exactly like a deep block. Turn the drip down now and you may be cutting the drug for a patient who\'s actually at goal or under-blocked. Troubleshoot first.':'Right direction, but confirm first: another nerve and the clinical picture, then reduce <b>per order</b> and notify.');break;
+    }
+  });
+  $('#tsgNew').addEventListener('click',start);
+  start();
+})();
+
+/* =====================================================================
+   07 · cases
+   ===================================================================== */
+const CASES=[
+ {t:'Case 1 · Day one in ARDS',stem:'54M, ARDS, P/F 88 on high PEEP. Propofol and fentanyl running, RASS −5. Baseline left ulnar setting <b>5</b> found before the start. Cisatracurium bolus and infusion started 12 minutes ago.',vit:[['TOF','4/4'],['SpO₂','86%'],['Vent','AC, rate 26']],
+  steps:[
+   {q:'12 minutes in, still 4/4. Next move?',o:[
+     ['Increase per the titration order and recheck in 10–15 min',1,'Right. Under goal; titrate and recheck at the 10–15 min mark.'],
+     ['Turn the PNS up to 7 so it\'s easier to see',0,'The setting stays at baseline (5) for the whole infusion. Changing it changes what the count means.'],
+     ['Wait for the q4h check',0,'q4h is the charting minimum once stable. After a start or change, recheck in 10–15 min.']]},
+   {q:'Two titrations later, the next check is 0/4. First move?',o:[
+     ['Turn the infusion down',0,'Not yet. Rule out the device first; a dead battery looks exactly like this.'],
+     ['Battery, electrodes, position, polarity, then setting and another nerve',1,'Right. SCU10-505 order. Equipment before drug.'],
+     ['Call the provider right away',0,'They\'ll ask what you checked. Do the device checks; they take two minutes.']]},
+   {q:'Device checks out. Tibial is 0/4 too. He isn\'t triggering the vent or moving. Now?',o:[
+     ['Hold or reduce per order, notify the provider, recheck in 10–15 min',1,'Right. True deep block: more drug than needed. Keep the sedation running.'],
+     ['Leave it; deeper is safer in ARDS',0,'Extra block adds risk (prolonged weakness) with no benefit. Titrate to goal.'],
+     ['Stop the propofol since he\'s paralyzed anyway',0,'Never. Sedation and analgesia continue for as long as the NMBA runs.']]}
+  ]},
+ {t:'Case 2 · Quiet isn\'t comfortable',stem:'67F on an NMBA for refractory hypoxemia, steady at 2/4 all shift. In the last 20 minutes:',vit:[['TOF','2/4'],['HR','88 → 124'],['BP','118/64 → 162/90'],['Eyes','tearing']],
+  steps:[
+   {q:'What do you think is going on?',o:[
+     ['She\'s at goal, so nothing to do',0,'The count tells you about the muscle, not the brain. She can\'t move to tell you anything.'],
+     ['Possible pain or awareness: check the sedation and analgesia infusions now',1,'Right. Vitals and tears are unreliable signs, but a sudden change is still a reason to check.'],
+     ['Increase the NMBA',0,'More paralysis treats nothing here. It just hides her better.']]},
+   {q:'The propofol bag ran dry 30 minutes ago and the pump alarm was silenced. Next?',o:[
+     ['Hang a new bag, bolus per order, notify the provider, and talk to her',1,'Right. Restart per order, tell the provider, and reassure her out loud; she may remember this.'],
+     ['Restart the propofol at the old rate and keep quiet',0,'Restart, yes, but the provider needs to know about a gap in sedation under paralysis.'],
+     ['Hold the NMBA until sedation catches up',0,'Stopping abruptly isn\'t your call alone, and won\'t help her in time. Fix the sedation and call.']]}
+  ]},
+ {t:'Case 3 · The weak side',stem:'72M, right MCA stroke with <b>left</b> hemiparesis, now in ARDS. Both arms are puffy after fluid resuscitation. You\'re finding a baseline before the NMBA starts.',vit:[['Left side','weak'],['Arms','2+ edema']],
+  steps:[
+   {q:'Which site first?',o:[
+     ['Left ulnar',0,'Not on a paralyzed or partially paralyzed limb. Its count doesn\'t represent the rest of him.'],
+     ['Right ulnar',1,'Right. Unaffected limb, preferred site.'],
+     ['Facial',0,'Last resort, used only after the other sites fail.']]},
+   {q:'Right ulnar: no response even at the highest setting, with fresh pads and the device checked. Next?',o:[
+     ['Right posterior tibial',1,'Right. Retest another nerve; edema at the wrist is a common reason.'],
+     ['Start the NMBA anyway and use clinical signs',0,'You need a baseline before the drug goes in. Try another nerve.'],
+     ['Facial',0,'Try the posterior tibial first. Facial can read falsely high.']]},
+   {q:'Days later the infusion has been off for 4 h. Right tibial is 4/4. Ready to extubate?',o:[
+     ['Yes, the count is back',0,'4/4 can hide significant fade. A bedside PNS can\'t confirm extubation readiness.'],
+     ['Not on the count alone: head lift, wide eye opening, tongue out, each over 5 s, plus the RT/provider weaning assessment',1,'Right. Functional signs from SCU10-505, plus the team\'s weaning assessment.']]}
+  ]}
+];
+(function(){
+  const host=$('#caseHost');
+  CASES.forEach((c,ci)=>{
+    const el=document.createElement('div');el.className='case';
+    el.innerHTML='<h3>'+c.t+'</h3><p>'+c.stem+'</p><div class="vit">'+c.vit.map(v=>'<div><span>'+v[0]+'</span>'+v[1]+'</div>').join('')+'</div>'+
+      c.steps.map((s,si)=>'<div class="step"'+(si?' hidden':'')+' data-s="'+si+'"><h4>'+(si+1)+' · '+s.q+'</h4><div class="opts">'+
+        s.o.map((o,oi)=>'<button class="mbtn" data-o="'+oi+'">'+o[0]+'</button>').join('')+'</div><div class="fb" hidden></div></div>').join('');
+    host.appendChild(el);
+    el.addEventListener('click',e=>{
+      const b=e.target.closest('button[data-o]');if(!b)return;
+      const stepEl=b.closest('.step'),si=+stepEl.dataset.s,o=c.steps[si].o[+b.dataset.o],fb=$('.fb',stepEl);
+      fb.hidden=false;fb.textContent=o[2];fb.className='fb'+(o[1]?'':' bad');
+      if(o[1]){b.classList.add('right');$$('button',stepEl).forEach(x=>x.disabled=true);const nx=$('[data-s="'+(si+1)+'"]',el);if(nx)nx.hidden=false;}
+      else b.classList.add('wrong');
+    });
+  });
+})();
+
+/* ---------- print station ---------- */
+$('#printStation').addEventListener('click',()=>{document.body.classList.add('print-station');window.print();});
+window.addEventListener('afterprint',()=>document.body.classList.remove('print-station'));
+})();
+</script>
+</body>
+</html>
