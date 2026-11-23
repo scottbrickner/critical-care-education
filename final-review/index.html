@@ -1,0 +1,2747 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Critical Care Core · Final Review · Jeopardy+</title>
+<style>
+:root{--bg:#0f1420;--panel:#171e2e;--panel2:#1f2840;--line:#2c3757;--ink:#eef2fb;--mute:#9aa6c4;--card:#990000;--gold:#ffcc00;--ok:#3ccf7d;--bad:#ff5d5d;--A:#2bb3a3;--B:#f2a93b;--C:#9b7bea;--D:#e8607a}
+*{box-sizing:border-box}html,body{margin:0;height:100%;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif}
+button{font:inherit;cursor:pointer;border:0;border-radius:10px;padding:.55em 1em;background:var(--panel2);color:var(--ink)}
+button:hover{filter:brightness(1.15)}button.pri{background:var(--card);color:#fff;font-weight:700}button.gold{background:var(--gold);color:#1a1a1a;font-weight:700}button.ghost{background:transparent;border:1px solid var(--line);color:var(--mute)}
+button:disabled{opacity:.4;cursor:not-allowed}
+header{display:flex;align-items:center;gap:14px;padding:10px 18px;border-bottom:1px solid var(--line);background:#0b0f19}
+header h1{font-size:18px;margin:0;font-weight:700;letter-spacing:.3px}header h1 b{color:var(--gold)}
+.code{margin-left:auto;display:flex;align-items:center;gap:10px;font-size:15px;color:var(--mute)}.code b{font-size:26px;letter-spacing:4px;color:var(--gold);font-family:Consolas,monospace}
+.net{width:10px;height:10px;border-radius:50%;background:#666;display:inline-block}.net.on{background:var(--ok)}.net.err{background:var(--bad)}
+main{padding:18px;max-width:1500px;margin:0 auto}
+.muted{color:var(--mute)}.big{font-size:clamp(22px,2.4vw,36px);line-height:1.25}
+.row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}.grow{flex:1}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:16px}
+/* board */
+.board{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.colh{background:var(--card);color:#fff;border-radius:10px;min-height:72px;display:flex;align-items:center;justify-content:center;text-align:center;font-weight:800;font-size:clamp(14px,1.45vw,22px);white-space:pre-line;padding:6px;text-transform:uppercase;letter-spacing:.5px}
+.tile{position:relative;background:linear-gradient(180deg,#22305a,#18213d);border:1px solid #33427a;border-radius:10px;min-height:clamp(60px,9.5vh,110px);font-size:clamp(26px,3.2vw,50px);font-weight:900;color:var(--gold);display:flex;align-items:center;justify-content:center;text-shadow:0 2px 0 #000}
+.tile .tag{position:absolute;top:6px;left:8px;font-size:15px;text-shadow:none}.tile .lvl{position:absolute;bottom:5px;right:8px;font-size:11px;color:#8fa0d0;text-shadow:none;font-weight:600}
+.tile.done{background:#141a2a;border-color:#1f2740;color:#3b4566;font-size:14px;text-shadow:none;flex-direction:column;gap:2px}
+.tile.done .mini{font-size:13px;font-weight:700}
+.final{margin-top:12px;display:flex;justify-content:center}
+.scores{display:grid;gap:12px;margin-top:16px}
+.team{border-radius:12px;padding:10px 14px;background:var(--panel);border-left:8px solid}
+.team .pts{font-size:clamp(24px,2.6vw,38px);font-weight:900}.team .roles{font-size:13px;color:var(--mute);margin-top:4px}
+/* question */
+.qhead{display:flex;align-items:center;gap:12px;margin-bottom:10px}.pill{border-radius:999px;padding:4px 12px;font-size:14px;font-weight:700;background:var(--panel2)}
+.pill.val{background:var(--gold);color:#111}.pill.judge{background:#4a3b8f}.pill.skill{background:#145c52}.pill.chain{background:#5c3b14}
+.case{background:#2a2115;border:1px solid #5c4520;border-radius:12px;padding:10px 14px;margin-bottom:12px;font-size:clamp(16px,1.4vw,22px)}
+.stem{font-size:clamp(24px,2.5vw,40px);font-weight:700;line-height:1.25;margin:6px 0 14px}
+.data{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:8px;margin-bottom:14px}.data div{background:var(--panel2);border-radius:10px;padding:8px 12px;font-size:clamp(16px,1.4vw,22px)}.data b{display:block;font-size:13px;color:var(--mute);font-weight:600}
+.opts{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.opt{background:var(--panel);border:2px solid var(--line);border-radius:12px;padding:14px 16px;font-size:clamp(18px,1.7vw,28px);display:flex;gap:12px;align-items:flex-start;position:relative;overflow:hidden}
+.opt .L{font-weight:900;color:var(--gold);min-width:1.2em}.opt.key{border-color:var(--ok);background:#13321f}.opt.dim{opacity:.55}
+.opt .cr{margin-left:auto;font-size:14px;font-weight:800;border-radius:8px;padding:2px 8px;background:#333}
+.dist{display:flex;height:12px;border-radius:6px;overflow:hidden;margin-top:8px;background:#0003}
+.qwrap{display:grid;grid-template-columns:1fr 320px;gap:16px}
+.side .panel{margin-bottom:12px}
+.timer{font-size:56px;font-weight:900;text-align:center;font-family:Consolas,monospace}.timer.low{color:var(--bad)}
+.cnt{display:flex;justify-content:space-between;padding:4px 0;font-size:18px}
+.why{background:#13321f;border:1px solid #2b6b45;border-radius:12px;padding:14px;font-size:clamp(17px,1.5vw,24px);margin-top:14px;line-height:1.35}
+.deb{background:#2a2346;border:1px solid #4a3b8f;border-radius:12px;padding:12px 14px;font-size:clamp(16px,1.4vw,22px);margin-top:12px}
+table{border-collapse:collapse;width:100%}td,th{padding:6px 8px;border-bottom:1px solid var(--line);text-align:left;font-size:15px}
+.chk{display:grid;grid-template-columns:1fr repeat(var(--nt),38px);gap:4px;align-items:center;font-size:14px}.chk input{width:22px;height:22px}
+.legend{display:flex;gap:12px;font-size:13px;color:var(--mute);align-items:center}.sw{display:inline-block;width:14px;height:10px;border-radius:3px;margin-right:4px;vertical-align:middle}
+.lobby{display:grid;grid-template-columns:auto 1fr;gap:24px;align-items:start}
+.qr{background:#fff;padding:10px;border-radius:12px;width:340px}.qr svg{width:100%;height:auto;display:block}
+.plist{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.plist .team{min-height:160px}.chip{display:inline-flex;align-items:center;gap:6px;background:var(--panel2);padding:4px 10px;border-radius:999px;margin:3px;font-size:16px}.chip button{padding:0 6px;background:transparent;color:var(--mute)}
+.bars .b{display:grid;grid-template-columns:150px 1fr 70px;gap:10px;align-items:center;margin:6px 0}.bars .t{height:22px;border-radius:6px;background:#0004;overflow:hidden}.bars .t i{display:block;height:100%}
+.warn{background:#3d1a1a;border:1px solid #7a2a2a;border-radius:10px;padding:8px 12px;color:#ffb3b3}
+.foot{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.toast{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);background:#000c;padding:10px 16px;border-radius:10px;display:none}
+@media (max-width:1000px){.qwrap{grid-template-columns:1fr}.opts{grid-template-columns:1fr}.lobby{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header>
+  <h1>Critical Care Core · <b>Final Review</b> · Jeopardy+</h1>
+  <div class="code" id="hdrCode"></div>
+</header>
+<main id="app"></main>
+<div class="toast" id="toast"></div>
+<script>// Shared config + backend helpers (host and player)
+const CCR = {
+  url: "https://ixzjhchfgicxgaqhmkku.supabase.co",
+  key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4empoY2hmZ2ljeGdhcWhta2t1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MDkxNTUsImV4cCI6MjEwMzA4NTE1NX0.xcxkBg77-yDrCIgJ9WER672DGeORiaPf0KXK7gcduKc",
+  playBase: "https://scottbrickner.github.io/critical-care-education/final-review/play.html",
+  teams: { A: { name: "Team A", color: "#2bb3a3" }, B: { name: "Team B", color: "#f2a93b" }, C: { name: "Team C", color: "#9b7bea" }, D: { name: "Team D", color: "#e8607a" } },
+  conf: { 1: { label: "Guessing", mult: "×1", stake: "+1× / 0" }, 2: { label: "Fairly sure", mult: "×2", stake: "+2× / −2×" }, 3: { label: "Certain", mult: "×3", stake: "+3× / −6×" } },
+  roles: ["Charge", "Skills lead", "Devil's advocate"]
+};
+async function rpc(fn, args) {
+  const r = await fetch(CCR.url + "/rest/v1/rpc/" + fn, {
+    method: "POST",
+    headers: { apikey: CCR.key, Authorization: "Bearer " + CCR.key, "Content-Type": "application/json" },
+    body: JSON.stringify(args || {})
+  });
+  const t = await r.text();
+  let j = null; try { j = t ? JSON.parse(t) : null; } catch (e) { j = t; }
+  if (!r.ok) throw new Error((j && j.message) || ("HTTP " + r.status));
+  return j;
+}
+// Certainty-based marking (Gardner-Medwin): right +1/+2/+3, wrong 0/-2/-6 (x tile value)
+function scoreAnswer(tile, choice, conf, key, credit) {
+  if (!choice) return 0;
+  if (tile.type === "judge") return Math.round(tile.value * ((credit && credit[choice]) || 0));
+  if (choice === key) return tile.value * conf;
+  return conf === 1 ? 0 : conf === 2 ? -2 * tile.value : -6 * tile.value;
+}
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+const LETTERS = ["A", "B", "C", "D"];
+</script>
+<script>// Synthetic 6-second ECG strips (lead II style) drawn as SVG on standard ECG paper.
+function ecgStrip(kind, W, H) {
+  W = W || 1000; H = H || 220;
+  const secs = 6, fs = 500, pxPerSec = W / secs, mm = pxPerSec / 25; // 25 mm/s
+  const base = H * 0.62, pxPerMv = mm * 10;
+  const g = (t, c, w, a) => a * Math.exp(-((t - c) * (t - c)) / (2 * w * w));
+  const ev = []; // {t, type}
+  if (kind === "chb") {
+    for (let t = 0.15; t < secs; t += 0.75) ev.push({ t, type: "P" });
+    for (let t = 0.55; t < secs; t += 1.667) ev.push({ t, type: "VW" });
+  } else if (kind === "vfail") {
+    const cap = [1, 1, 0, 0, 1, 0, 1, 1];
+    let i = 0;
+    for (let t = 0.25; t < secs; t += 0.857, i++) { ev.push({ t, type: "SPIKE" }); if (cap[i]) ev.push({ t: t + 0.02, type: "VP" }); }
+  }
+  const spikes = [];
+  const v = new Float32Array(secs * fs);
+  for (let n = 0; n < v.length; n++) {
+    const t = n / fs; let y = 0;
+    for (const e of ev) {
+      const d = t - e.t; if (d < -0.3 || d > 0.7) continue;
+      if (e.type === "P") y += g(t, e.t, 0.03, 0.22);
+      if (e.type === "VW" || e.type === "VP") { // wide ventricular complex with discordant T
+        y += g(t, e.t + 0.04, 0.03, e.type === "VP" ? -0.35 : 0.9);
+        y += g(t, e.t + 0.11, 0.035, e.type === "VP" ? -0.9 : -0.35);
+        y += g(t, e.t + 0.38, 0.07, e.type === "VP" ? 0.3 : -0.3);
+      }
+    }
+    v[n] = y + 0.01 * Math.sin(2 * Math.PI * 0.3 * t);
+  }
+  for (const e of ev) if (e.type === "SPIKE") spikes.push(e.t);
+  let grid = "";
+  for (let x = 0, i = 0; x <= W + 0.1; x += mm, i++) grid += `<line x1="${x.toFixed(1)}" y1="0" x2="${x.toFixed(1)}" y2="${H}" stroke="${i % 5 ? "#f3c6c6" : "#e48f8f"}" stroke-width="${i % 5 ? 0.5 : 1}"/>`;
+  for (let y = 0, i = 0; y <= H + 0.1; y += mm, i++) grid += `<line x1="0" y1="${y.toFixed(1)}" x2="${W}" y2="${y.toFixed(1)}" stroke="${i % 5 ? "#f3c6c6" : "#e48f8f"}" stroke-width="${i % 5 ? 0.5 : 1}"/>`;
+  let d = "";
+  for (let n = 0; n < v.length; n += 2) d += (n ? "L" : "M") + (n / fs * pxPerSec).toFixed(1) + " " + (base - v[n] * pxPerMv).toFixed(1);
+  let sp = spikes.map(t => { const x = (t * pxPerSec).toFixed(1); return `<line x1="${x}" y1="${base}" x2="${x}" y2="${base - pxPerMv * 1.6}" stroke="#111" stroke-width="1.6"/>`; }).join("");
+  return `<svg viewBox="0 0 ${W} ${H}" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="ECG rhythm strip" style="width:100%;height:auto;background:#fff7f7;border-radius:8px">${grid}<path d="${d}" fill="none" stroke="#111" stroke-width="2" stroke-linejoin="round"/>${sp}<text x="8" y="18" font-family="Arial" font-size="14" fill="#7a2020">II · 25 mm/s · 6 sec</text></svg>`;
+}
+
+</script>
+<script>//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(row * cellSize, col * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+</script>
+<script>const BANK={"columns":[{"id":"C1","name":"Cardio &\nHemodynamics","short":"Cardio/Hemo"},{"id":"C2","name":"Rhythms &\nPacing","short":"Rhythm/Pace"},{"id":"C3","name":"Pulm, Vent\n& ABGs","short":"Pulm/ABG"},{"id":"C4","name":"Neuro","short":"Neuro"},{"id":"C5","name":"Multisystem","short":"Multisystem"},{"id":"C6","name":"🔧 Hands-On","short":"Hands-On"}],"chains":{"BED4":{"title":"Bed 4 · POD 0 CABG ×3","text":"68-year-old, 4 hours post CABG ×3. Two mediastinal chest tubes. Was stable on arrival from the OR."}},"tiles":[{"id":"C1-100","col":"C1","value":100,"type":"mc","stem":"Which hemodynamic value best reflects LEFT ventricular preload?","opts":["CVP / right atrial pressure","Pulmonary artery occlusion pressure (wedge)","Systemic vascular resistance","Cardiac index"],"why":"PAOP approximates left atrial pressure and LVEDP (absent mitral disease or very high PEEP). CVP is right-sided preload, SVR is afterload, and CI is output."},{"id":"C1-200","col":"C1","value":200,"type":"mc","stem":"Inferior STEMI. BP 78/50, HR 54, clear lungs, JVD. Right-sided lead V4R shows ST elevation. Best initial intervention?","opts":["Sublingual nitroglycerin","IV fluid bolus","IV furosemide","IV morphine for pain"],"why":"RV infarct: the RV is preload-dependent. Give volume. Nitrates, diuretics and morphine all drop preload and can crash the pressure.","debrief":"Which home med on the MAR would you hold, and who do you tell?"},{"id":"C1-300","col":"C1","value":300,"type":"mc","chain":"BED4","stem":"Chest tube output was brisk for 2 hours, then suddenly almost stopped. Look at the numbers. What's most likely going on?","data":[["CT output","250 → 250 → 10 mL/hr"],["HR / BP","128 / 82/64"],["CVP · PAD · PAOP","18 · 19 · 18"],["CI","1.6"]],"opts":["Hypovolemia from bleeding","Cardiac tamponade","Left ventricular failure","Vasoplegia"],"why":"Equalized diastolic pressures (CVP ≈ PAD ≈ PAOP), a sudden stop in chest tube drainage, low CI and a narrow pulse pressure = tamponade. Hypovolemia gives LOW filling pressures. Vasoplegia gives a HIGH CI with low SVR."},{"id":"C1-400","col":"C1","value":400,"type":"mc","chain":"BED4","stem":"Same patient — you suspect tamponade. What is the priority?","opts":["Bolus 1 L crystalloid and reassess in 1 hour","Notify the CT surgeon now and prepare for bedside re-exploration (open-chest setup)","Start dobutamine to improve contractility","Increase PEEP to tamponade the bleeding"],"why":"Post-cardiac-surgery tamponade needs surgical decompression. Volume can bridge for minutes, but it can't delay the call. Inotropes don't fix a compressed heart, and more PEEP lowers venous return further.","debrief":"Walk through your bedside sternotomy setup. Where's the U-drape, who runs the code cart?"},{"id":"C2-100","col":"C2","value":100,"type":"mc","strip":"chb","stem":"Identify this rhythm. (Atrial rate ≈ 80, ventricular rate ≈ 36, wide QRS, PR intervals vary with no pattern.)","opts":["2nd-degree AV block, Mobitz I (Wenckebach)","2nd-degree AV block, Mobitz II","3rd-degree (complete) heart block","Sinus bradycardia with 1st-degree block"],"why":"P waves march through regularly at their own rate, and QRS complexes march at a slower, wide escape rate. No P is conducted, so this is AV dissociation = complete heart block."},{"id":"C2-200","col":"C2","value":200,"type":"mc","strip":"vfail","stem":"POD 1 valve patient, VVI via epicardial wires at 70. Look at the strip: some pacing spikes have no QRS after them. Your FIRST move?","opts":["Increase the sensitivity number (make it less sensitive)","Check every connection, then increase V output (mA) and confirm capture","Switch to AAI","Decrease the rate to 50"],"why":"Spike without a QRS = failure to CAPTURE (output problem), not a sensing problem. Check cable and wire connections, then raise output and confirm a spike → wide QRS → pulse."},{"id":"C2-300","col":"C2","value":300,"type":"judge","stem":"0300. Same patient is pacer-dependent. The V threshold has climbed from 2 mA to 9 mA overnight. Now there's intermittent loss of capture even at 20 mA. You've checked every connection and swapped the cable. What do you do?","opts":["Turn output to max (25 mA) and recheck the threshold at 0700","Call the provider/EP now, put transcutaneous pads on and be ready to pace through them, and anticipate a transvenous wire","Unplug the bridging cable briefly to see the underlying rhythm","Put pads on now, then bring it up at 0600 rounds"],"why":"Unit standard: when device and wire troubleshooting is exhausted, ESCALATE and plan alternative pacing. Don't keep cranking. A climbing threshold means the wires are failing. NEVER unplug the cables on a dependent patient. Pads are right, but waiting until rounds isn't.","debrief":"What makes it hard to call at 0300? Give the SBAR you'd say in 20 seconds."},{"id":"C2-400","col":"C2","value":400,"type":"mc","stem":"Threshold testing on the 5392: V CAPTURE threshold = 3 mA. V SENSING threshold = 4 mV (sense light stops flashing at 4 mV). Per our unit standard, set:","opts":["Output 6 mA · Sensitivity 2 mV","Output 9 mA · Sensitivity 2 mV","Output 6 mA · Sensitivity 8 mV","Output 3 mA · Sensitivity 4 mV"],"why":"Keck trains output at 2× the capture threshold (3 → 6 mA) and sensitivity at ½ or less of the sensing threshold (4 → 2 mV). A lower mV number = MORE sensitive. 3× is the manufacturer's range, but we train to double."},{"id":"C3-100","col":"C3","value":100,"type":"mc","stem":"ABG: pH 7.29 · PaCO₂ 58 · HCO₃ 25. Interpretation?","opts":["Metabolic acidosis","Respiratory acidosis, uncompensated","Respiratory alkalosis","Respiratory acidosis, fully compensated"],"why":"Acidemic pH with a high CO₂ = respiratory acidosis. HCO₃ is normal, so there's no metabolic compensation yet: uncompensated (acute)."},{"id":"C3-200","col":"C3","value":200,"type":"judge","stem":"25 minutes into a spontaneous breathing trial: RR 34, HR up 25 from baseline, diaphoretic, SpO₂ 89%. The team is rushing: \"Looks fine — let's extubate, OR needs the vent.\" You…","opts":["Speak up with the data (\"I'm concerned, he's meeting SBT failure criteria\"), stop the SBT per protocol, and ask for reassessment","Extubate — RT and the provider own airway decisions","Quietly turn up the FiO₂ and let the trial finish","Let it run to 30 minutes, then report what you saw"],"why":"Tachypnea, tachycardia, diaphoresis and desaturation are SBT failure criteria. Speaking up (CUS: Concerned, Uncomfortable, Safety issue) with objective data is the job. Production pressure isn't a clinical indication.","debrief":"What exact words would you use? What if they push back?"},{"id":"C3-300","col":"C3","value":300,"type":"mc","stem":"During an SBT: RR 28, spontaneous tidal volume 350 mL. What's the RSBI, and what does it suggest?","opts":["80: favorable for extubation","9.8: favorable for extubation","80: predicts failure","125: predicts failure"],"why":"RSBI = RR ÷ Vt in LITERS = 28 ÷ 0.35 = 80. Under 105 predicts weaning success. It's one data point, so look at the whole patient (mentation, secretions, cough)."},{"id":"C3-400","col":"C3","value":400,"type":"mc","stem":"ARDS on volume A/C: Vt 8 mL/kg PBW, PEEP 12, plateau pressure 34. Which change fits lung-protective ventilation?","opts":["Increase Vt to blow off CO₂","Lower Vt toward 6 mL/kg PBW, target plateau ≤ 30, and accept permissive hypercapnia","Drop PEEP to 5 to lower the plateau","Raise the rate to 40 and leave Vt alone"],"why":"ARDSnet: Vt 4–8 (aim 6) mL/kg predicted body weight, plateau ≤ 30, and driving pressure (Pplat − PEEP) ideally < 15. Here it's 22. Dropping PEEP de-recruits; huge rates cause auto-PEEP."},{"id":"C4-100","col":"C4","value":100,"type":"mc","stem":"Opens eyes to pain, says inappropriate words, withdraws from pain. GCS?","opts":["7","8","9","10"],"why":"E2 (to pain) + V3 (inappropriate words) + M4 (withdraws) = 9."},{"id":"C4-200","col":"C4","value":200,"type":"mc","stem":"Which finding is a LATE sign of rising intracranial pressure?","opts":["Restlessness","Headache","Widened pulse pressure, bradycardia and irregular respirations","Subtle decline in level of consciousness"],"why":"Cushing's triad is a late, pre-herniation finding. A change in LOC is the EARLIEST and most sensitive sign, so don't wait for the triad."},{"id":"C4-300","col":"C4","value":300,"type":"judge","stem":"2 hours after IV thrombolytic for stroke: new severe headache, vomiting, BP 192/104, NIHSS up 3 points. The covering resident says, \"Give ondansetron, recheck in an hour.\" You…","opts":["Give the ondansetron and recheck in 1 hour","Treat it as possible hemorrhage: stat neuro reassessment, stop any thrombolytic, push for a stat head CT and bedside eval, and go up the chain of command if the response doesn't match the risk","Give labetalol per the BP parameters and keep the q1h neuro checks","Document and hand off to the next shift"],"why":"Headache, vomiting, acute hypertension and neuro decline after a thrombolytic = symptomatic ICH until proven otherwise. BP control (post-lytic goal < 180/105) is part of it, but the escalation is the point.","debrief":"Who's the next person you call if the resident doesn't come? Name them for this unit."},{"id":"C4-400","col":"C4","value":400,"type":"mc","stem":"Post transsphenoidal pituitary resection: urine output 400 mL/hr ×2 hr, urine specific gravity 1.002, serum Na 149. Most likely, and what do you anticipate?","opts":["SIADH: fluid restriction","Central diabetes insipidus: desmopressin and replace volume","Cerebral salt wasting: sodium tablets","Mannitol diuresis: hold mannitol"],"why":"Huge dilute urine with rising serum sodium = DI (low ADH). SIADH is the opposite: low output, concentrated urine, LOW sodium."},{"id":"C5-100","col":"C5","value":100,"type":"mc","stem":"DKA. Before you start the insulin infusion, which lab must you know?","opts":["Potassium","Phosphorus","Amylase","Lactate"],"why":"Insulin drives K⁺ into cells. If K⁺ is < 3.3, hold insulin and replace potassium first, or you risk lethal hypokalemia."},{"id":"C5-200","col":"C5","value":200,"type":"judge","stem":"Two alarms at once. Bed 7 (septic): MAP just dropped to 58 on norepinephrine, about 15 mL left in the bag. Bed 8 (stable post-op): call light, pain 7/10. Your coworker is free. Best plan?","opts":["Go to Bed 7, ask your coworker to take Bed 8's pain, get the replacement norepi bag hung before it runs dry, and update the provider on the MAP","Bed 8 first; pain control is a patient right","Go to Bed 7 and titrate up; change the bag when the pump alarms","Call the provider before going to either bed"],"why":"Hemodynamic instability first, delegate what you can, and NEVER let a vasoactive run dry. Have the next bag ready well before the 20 mL mark. Titrating without a bag plan sets up a crash.","debrief":"How do you ask a busy coworker for help so it actually lands?"},{"id":"C5-300","col":"C5","value":300,"type":"mc","stem":"Septic shock: lactate 4.6, MAP 60 after a 30 mL/kg crystalloid bolus. Next step per Surviving Sepsis?","opts":["Start norepinephrine, target MAP ≥ 65","Start dopamine as the first-line vasopressor","Give another 30 mL/kg and wait 2 hours before pressors","Start dobutamine"],"why":"Persistent hypotension after initial fluid → norepinephrine first-line, MAP ≥ 65 (peripheral start is OK while central access is arranged). Recheck lactate. Dopamine causes more arrhythmias."},{"id":"C5-400","col":"C5","value":400,"type":"mc","stem":"POD 7 CABG on heparin. Platelets fell from 240K to 90K, and there's a new DVT. What do you anticipate?","opts":["Continue heparin and transfuse platelets","Stop ALL heparin (flushes and heparin-coated lines too), send PF4/HIT testing, and start a non-heparin anticoagulant (argatroban or bivalirudin)","Stop heparin and start warfarin today","Switch to enoxaparin"],"why":"A > 50% platelet drop at 5–10 days plus a new thrombosis = HIT until proven otherwise. It's prothrombotic, so stop every heparin source and start a direct thrombin inhibitor. Starting warfarin now risks venous limb gangrene, and LMWH cross-reacts."},{"id":"C6-100","col":"C6","value":100,"type":"skill","stem":"Order: dobutamine 5 mcg/kg/min. Weight 70 kg. Bag label: 1,000 mcg/mL. Pump rate?","opts":["2.1 mL/hr","12.6 mL/hr","21 mL/hr","35 mL/hr"],"why":"5 × 70 = 350 mcg/min × 60 = 21,000 mcg/hr ÷ 1,000 mcg/mL = 21 mL/hr.","task":{"title":"Skills lead programs it","where":"Vasoactive sim or a pump with the drug library","items":["Verifies order + concentration against the bag label","Shows an independent calculation","Programs it through the drug library (guardrails on)","States the titration parameters and the bag-change plan"]}},{"id":"C6-200","col":"C6","value":200,"type":"skill","stem":"BP 150/90, ICP 24 mmHg. What's the CPP?","opts":["66 mmHg","86 mmHg","110 mmHg","126 mmHg"],"why":"MAP = (150 + 2×90) ÷ 3 = 110. CPP = MAP − ICP = 110 − 24 = 86. Usual target is CPP 60–70+; ICP > 20–22 needs treatment.","task":{"title":"Skills lead: neuro check on a faculty 'patient'","where":"At the front, faculty plays the patient","items":["Uses central stimulus correctly (trapezius / supraorbital)","Scores E, V and M separately and correctly","Checks pupils: size, shape, reactivity","Reports the change in SBAR"]}},{"id":"C6-300","col":"C6","value":300,"type":"skill","stem":"CO 4.0 L/min, BSA 2.0 m², MAP 70, CVP 10. Calculate the CI and SVR.","opts":["CI 2.0 · SVR 1,200","CI 8.0 · SVR 1,200","CI 2.0 · SVR 15","CI 2.0 · SVR 1,400"],"why":"CI = CO ÷ BSA = 2.0. SVR = (MAP − CVP) ÷ CO × 80 = 60 ÷ 4 × 80 = 1,200 dynes·s/cm⁵ (normal ~800–1,200).","task":{"title":"Skills lead: level, zero and read","where":"Hemodynamic sim / monitor with a transducer","items":["Levels the transducer at the phlebostatic axis (4th ICS, ½ AP diameter)","Opens to air and zeros","Reads PA and CVP at end-expiration","Tells a PA waveform from a wedge tracing"]}},{"id":"C6-400","col":"C6","value":400,"type":"skill","stem":"DDD pacing. A capture threshold 2 mA, V capture threshold 4 mA. Per our unit standard, set the A and V outputs to:","opts":["A 4 mA · V 8 mA","A 6 mA · V 12 mA","A 2 mA · V 4 mA","A 10 mA · V 20 mA"],"why":"We train to 2× the capture threshold: A 2 → 4 mA, V 4 → 8 mA. Tighter margins catch a rising threshold sooner and save the battery.","task":{"title":"Skills lead on the 5392","where":"Real 5392 or the pacemaker sim (as in this morning's station)","items":["Confirms backup: pads/defib available, patient on monitor","Finds the V capture threshold (output down until capture is lost)","Sets output at 2× and confirms capture (spike → QRS → pulse)","Checks the underlying rhythm safely (step the rate down or PAUSE — never unplug the cables)"]}}],"final":{"id":"FINAL","col":"FINAL","value":500,"type":"mc","stem":"FINAL · POD 2 AVR, now febrile and hypotensive. Read the PA catheter numbers. What kind of shock, and what's the first-line move?","data":[["Temp / HR","39.1 °C · AF 118"],["BP","84/40"],["CI · SVR · CVP","4.1 · 520 · 6"],["Lactate","5.0"]],"opts":["Cardiogenic: start dobutamine","Distributive (likely septic): reassess volume, start norepinephrine, cultures, then antibiotics within the hour","Hypovolemic: volume only","Obstructive: prepare for pericardiocentesis"],"why":"High CI with a very low SVR = distributive. Fever + lactate points to sepsis. Volume to responsiveness, norepinephrine to MAP ≥ 65, cultures, then antibiotics fast. Cardiogenic = LOW CI and high SVR.","debrief":"What's the one thing from today you'll look up again before the exam?"}};</script>
+<script>
+// ───────────────────────── host state ─────────────────────────
+const KEYS = JSON.parse(atob("fX1sbHVuOiJyYyIsIkIiOiJrIns6IkxBTklGIix9bGx1bjoicmMiLCJBIjoiayJ7OiIwMDQtNkMiLH1sbHVuOiJyYyIsIkEiOiJrIns6IjAwMy02QyIsfWxsdW46InJjIiwiQiI6ImsiezoiMDAyLTZDIix9bGx1bjoicmMiLCJDIjoiayJ7OiIwMDEtNkMiLH1sbHVuOiJyYyIsIkIiOiJrIns6IjAwNC01QyIsfWxsdW46InJjIiwiQSI6ImsiezoiMDAzLTVDIix9fTA6IkQiLDUuMDoiQyIsMDoiQiIsMToiQSJ7OiJyYyIsIkEiOiJrIns6IjAwMi01QyIsfWxsdW46InJjIiwiQSI6ImsiezoiMDAxLTVDIix9bGx1bjoicmMiLCJCIjoiayJ7OiIwMDQtNEMiLH19MDoiRCIsNS4wOiJDIiwxOiJCIiwwOiJBIns6InJjIiwiQiI6ImsiezoiMDAzLTRDIix9bGx1bjoicmMiLCJDIjoiayJ7OiIwMDItNEMiLH1sbHVuOiJyYyIsIkMiOiJrIns6IjAwMS00QyIsfWxsdW46InJjIiwiQiI6ImsiezoiMDA0LTNDIix9bGx1bjoicmMiLCJBIjoiayJ7OiIwMDMtM0MiLH19NTIuMDoiRCIsMDoiQyIsMDoiQiIsMToiQSJ7OiJyYyIsIkEiOiJrIns6IjAwMi0zQyIsfWxsdW46InJjIiwiQiI6ImsiezoiMDAxLTNDIix9bGx1bjoicmMiLCJBIjoiayJ7OiIwMDQtMkMiLH19NS4wOiJEIiwwOiJDIiwxOiJCIiwwOiJBIns6InJjIiwiQiI6ImsiezoiMDAzLTJDIix9bGx1bjoicmMiLCJCIjoiayJ7OiIwMDItMkMiLH1sbHVuOiJyYyIsIkMiOiJrIns6IjAwMS0yQyIsfWxsdW46InJjIiwiQiI6ImsiezoiMDA0LTFDIix9bGx1bjoicmMiLCJCIjoiayJ7OiIwMDMtMUMiLH1sbHVuOiJyYyIsIkIiOiJrIns6IjAwMi0xQyIsfWxsdW46InJjIiwiQiI6ImsiezoiMDAxLTFDIns=").split("").reverse().join("")); // light obfuscation of the answer key
+const ALL = [...BANK.tiles, BANK.final];
+const T = id => ALL.find(t => t.id === id);
+const colName = id => id === "FINAL" ? "Final" : BANK.columns.find(c => c.id === id).short;
+const LS = "ccr_host_v1";
+let S = load() || fresh();
+let poll = null, tick = null;
+function fresh() { return { code: null, hostKey: null, online: false, view: "setup", teams: ["A", "B", "C"], players: [], answers: [], played: {}, roleRound: 0, sinceRotate: 0, timerDefault: 60, current: null, phase: null, endsAt: 0, playBase: CCR.playBase, seq: 0 }; }
+function load() { try { return JSON.parse(localStorage.getItem(LS)); } catch (e) { return null; } }
+function save() { try { localStorage.setItem(LS, JSON.stringify(S)); } catch (e) { } }
+function toast(m) { const t = document.getElementById("toast"); t.textContent = m; t.style.display = "block"; clearTimeout(t._h); t._h = setTimeout(() => t.style.display = "none", 2600); }
+function key(id) { return KEYS[id].k; } function credit(id) { return KEYS[id].cr; }
+let netState = "";
+function setNet(s) { netState = s; hdr(); }
+function hdr() {
+  const h = document.getElementById("hdrCode");
+  if (!S.code && !S.online) { h.innerHTML = S.view === "setup" ? "" : `<span class="muted">Offline · paddle mode</span>`; return; }
+  h.innerHTML = `<span class="net ${netState}"></span><span>Join at <b style="font-size:15px;letter-spacing:0;color:var(--ink);font-family:inherit">${esc(shortUrl())}</b></span><span>code</span><b>${S.code}</b>`;
+}
+function shortUrl() { return S.playBase.replace(/^https?:\/\//, "").replace(/\/play\.html$/, "/play"); }
+function joinUrl() { return S.playBase + "?c=" + S.code; }
+async function push(extra) {
+  if (!S.online) return;
+  S.seq++;
+  const st = Object.assign({ seq: S.seq, teams: S.teams, roles: rolesMap() }, extra);
+  try { await rpc("ccr_set_state", { p_code: S.code, p_host_key: S.hostKey, p_state: st }); setNet("on"); }
+  catch (e) { setNet("err"); toast("Couldn't reach the server. Phones may lag. Manual scoring still works."); }
+}
+async function pull() {
+  if (!S.online) return;
+  try { const d = await rpc("ccr_host_data", { p_code: S.code, p_host_key: S.hostKey }); S.players = d.players || []; S.answers = d.answers || []; setNet("on"); save(); }
+  catch (e) { setNet("err"); }
+}
+function startPoll(ms) { stopPoll(); poll = setInterval(async () => { await pull(); refreshLive(); }, ms || 2000); }
+function stopPoll() { if (poll) clearInterval(poll); poll = null; }
+function members(team) { return S.players.filter(p => p.team === team); }
+function rolesMap() {
+  const m = {};
+  S.teams.forEach(tm => { const ms = members(tm); const n = ms.length; if (!n) return;
+    CCR.roles.forEach((r, i) => { if (i < n) { const p = ms[(S.roleRound + i) % n]; m[p.id] = r; } }); });
+  return m;
+}
+function rolesText(tm) { const m = rolesMap(); return members(tm).filter(p => m[p.id]).map(p => `${m[p.id]}: <b>${esc(p.nick)}</b>`).join(" · "); }
+
+// ───────────────────────── scoring ─────────────────────────
+function ansFor(tile) { return S.answers.filter(a => a.t === tile); }
+function teamTilePts(tileId, tm) {
+  const t = T(tileId), P = S.played[tileId] || {};
+  let base = 0;
+  const man = P.manual && P.manual[tm];
+  if (man && man.c) base = scoreAnswer(t, man.c, man.k || 1, key(tileId), credit(tileId));
+  else {
+    const ms = members(tm); if (ms.length) {
+      const A = ansFor(tileId); let sum = 0;
+      ms.forEach(p => { const a = A.find(x => x.p === p.id); if (a) sum += scoreAnswer(t, a.c, a.k, key(tileId), credit(tileId)); });
+      base = Math.round(sum / ms.length);
+    }
+  }
+  let bonus = 0;
+  if (t.task && P.checks && P.checks[tm]) bonus = Math.round(t.value * P.checks[tm].filter(Boolean).length / t.task.items.length);
+  return { base, bonus, total: base + bonus };
+}
+function totals() { const o = {}; S.teams.forEach(tm => o[tm] = 0); Object.keys(S.played).forEach(id => { const P = S.played[id]; if (P.pts) S.teams.forEach(tm => o[tm] += (P.pts[tm] || 0)); }); return o; }
+
+// ───────────────────────── views ─────────────────────────
+const app = document.getElementById("app");
+function go(v) { S.view = v; save(); render(); }
+function render() {
+  hdr(); clearInterval(tick); tick = null;
+  ({ setup: vSetup, lobby: vLobby, board: vBoard, q: vQ, report: vReport, faculty: vFaculty })[S.view]();
+}
+function vSetup() {
+  stopPoll();
+  app.innerHTML = `<div class="panel" style="max-width:900px;margin:40px auto">
+  <div class="big" style="font-weight:800">Set up today's game</div>
+  <p class="muted">Critical Care Core · Day 6 · final exam review. Original items mapped to the AKAT · BKAT · CCRN/PCCN blueprint.</p>
+  <div class="row" style="margin:14px 0"><span>Teams:</span>${["A", "B", "C", "D"].map(t => `<label class="chip"><input type="checkbox" class="tmck" value="${t}" ${S.teams.includes(t) ? "checked" : ""}> ${t === "D" ? "Group D" : "Group " + t}</label>`).join("")}</div>
+  <div class="row" style="margin:14px 0"><span>Answer timer</span><select id="tdef">${[45, 60, 75, 90].map(s => `<option ${s === S.timerDefault ? "selected" : ""}>${s}</option>`).join("")}</select><span class="muted">seconds (hands-on tiles get +30)</span></div>
+  <div class="row" style="margin:14px 0"><span>Player link</span><input id="pbase" style="flex:1;padding:8px;border-radius:8px;border:1px solid var(--line);background:#0b0f19;color:var(--ink)" value="${esc(S.playBase)}"></div>
+  <div class="row" style="margin-top:20px"><button class="pri" id="bOnline">📱 Start with phones (room code)</button><button id="bOffline">🪧 Offline: paddle cards only</button>
+  ${S.code || Object.keys(S.played).length ? `<button class="ghost" id="bResume">Resume last game ${S.code ? "(" + S.code + ")" : ""}</button>` : ""}</div>
+  <p class="muted" style="margin-top:18px;font-size:14px">Scoring: every resident answers and picks a confidence. Right = +1×/+2×/+3× the tile value. Wrong = 0/−2×/−6×. Team score per tile = the team's <b>average</b>, so team size doesn't matter. ⚖ judgment tiles give best-answer credit with no multiplier. 🔧 tiles add a live-task bonus.</p></div>`;
+  const cfg = () => { S.teams = [...document.querySelectorAll(".tmck:checked")].map(i => i.value); if (!S.teams.length) S.teams = ["A", "B", "C"]; S.timerDefault = +document.getElementById("tdef").value; S.playBase = document.getElementById("pbase").value.trim() || CCR.playBase; };
+  document.getElementById("bOnline").onclick = async () => {
+    cfg(); const keep = { teams: S.teams, timerDefault: S.timerDefault, playBase: S.playBase };
+    S = Object.assign(fresh(), keep);
+    S.hostKey = [...crypto.getRandomValues(new Uint8Array(16))].map(b => b.toString(16).padStart(2, "0")).join("");
+    try { S.code = await rpc("ccr_create_game", { p_host_key: S.hostKey }); S.online = true; setNet("on"); save(); await push({ phase: "lobby" }); go("lobby"); }
+    catch (e) { S.code = null; alert("Couldn't create a room (" + e.message + ").\nCheck the network, or use Offline paddle mode."); }
+  };
+  document.getElementById("bOffline").onclick = () => { cfg(); const keep = { teams: S.teams, timerDefault: S.timerDefault, playBase: S.playBase }; S = Object.assign(fresh(), keep); S.online = false; save(); go("board"); };
+  const r = document.getElementById("bResume"); if (r) r.onclick = () => go(S.current && S.view === "q" ? "q" : (S.online && !Object.keys(S.played).length ? "lobby" : "board"));
+}
+function vLobby() {
+  const qr = qrcode(0, "M"); qr.addData(joinUrl()); qr.make();
+  app.innerHTML = `<div class="lobby">
+   <div><div class="qr">${qr.createSvgTag({ cellSize: 8, margin: 2, scalable: true })}</div>
+     <div class="big" style="text-align:center;margin-top:10px">Code <b style="color:var(--gold);letter-spacing:6px">${S.code}</b></div>
+     <div class="muted" style="text-align:center">${esc(shortUrl())}</div></div>
+   <div><div class="big" style="font-weight:800;margin-bottom:6px">Scan, pick a nickname, join your group</div>
+     <p class="muted" style="font-size:18px;margin-top:0">Use a nickname or initials. The screen only ever shows <b>team</b> scores. Your individual answers go to faculty for coaching only.</p>
+     <div class="plist" id="plist"></div>
+     <div class="panel" style="margin-top:14px;font-size:18px"><b>How you score:</b> every tile, you answer AND bet your confidence.
+     <div class="row" style="margin-top:8px">${[1, 2, 3].map(k => `<span class="pill">${CCR.conf[k].label} ${CCR.conf[k].mult} → ${CCR.conf[k].stake}</span>`).join("")}</div>
+     <div class="muted" style="margin-top:8px">Being <i>certain and wrong</i> costs the most, on purpose. That's the answer that hurts patients. "I'm guessing" is a safe, honest answer.</div></div>
+     <div class="foot"><button class="pri" id="bGo">Start the game →</button><button class="ghost" id="bBack">Setup</button></div></div></div>`;
+  document.getElementById("bGo").onclick = async () => { await pull(); await push({ phase: "board" }); go("board"); };
+  document.getElementById("bBack").onclick = () => go("setup");
+  startPoll(2000); refreshLive();
+}
+function lobbyList() {
+  const el = document.getElementById("plist"); if (!el) return;
+  el.innerHTML = S.teams.map(tm => `<div class="team" style="border-color:${CCR.teams[tm].color}"><div style="font-weight:800;font-size:20px">Group ${tm} <span class="muted">(${members(tm).length})</span></div>
+   ${members(tm).map(p => `<span class="chip">${esc(p.nick)}<button title="Remove" data-rm="${p.id}">×</button></span>`).join("")}</div>`).join("");
+  el.querySelectorAll("[data-rm]").forEach(b => b.onclick = async () => { if (!confirm("Remove this player?")) return; try { await rpc("ccr_remove_player", { p_code: S.code, p_host_key: S.hostKey, p_player: b.dataset.rm }); await pull(); lobbyList(); } catch (e) { toast("Couldn't remove: " + e.message); } });
+}
+function refreshLive() {
+  if (S.view === "lobby") lobbyList();
+  if (S.view === "q") liveCounts();
+}
+function vBoard() {
+  stopPoll(); if (S.online) startPoll(5000);
+  const tot = totals();
+  const lvl = v => v <= 200 ? "BKAT · PCCN" : "AKAT · CCRN";
+  let g = BANK.columns.map(c => `<div class="colh">${esc(c.name)}</div>`).join("");
+  [100, 200, 300, 400].forEach(v => BANK.columns.forEach(c => {
+    const t = BANK.tiles.find(x => x.col === c.id && x.value === v);
+    const P = S.played[t.id];
+    const tag = (t.type === "judge" ? "⚖" : "") + (t.type === "skill" ? "🔧" : "") + (t.chain ? "🔗" : "") + (t.strip ? "〰" : "");
+    if (P && P.done) g += `<button class="tile done" data-t="${t.id}"><span>${v}</span><span class="mini">${S.teams.map(tm => `<span style="color:${CCR.teams[tm].color}">${tm} ${fmt(P.pts[tm])}</span>`).join(" ")}</span></button>`;
+    else g += `<button class="tile" data-t="${t.id}"><span class="tag">${tag}</span>${v}<span class="lvl">${lvl(v)}</span></button>`;
+  }));
+  const fp = S.played.FINAL;
+  app.innerHTML = `<div class="board">${g}</div>
+  <div class="final"><button class="gold" data-t="FINAL" style="font-size:22px;padding:14px 34px">${fp && fp.done ? "✓ Final played" : "★ FINAL · 500 · shock state"}</button></div>
+  <div class="scores" style="grid-template-columns:repeat(${S.teams.length},1fr)">${S.teams.map(tm => `<div class="team" style="border-color:${CCR.teams[tm].color}"><div class="row"><b style="font-size:20px">Group ${tm}</b><span class="muted">${S.online ? members(tm).length + " players" : ""}</span></div><div class="pts">${fmt(tot[tm])}</div><div class="roles">${S.online ? rolesText(tm) : ""}</div></div>`).join("")}</div>
+  <div class="foot">
+   ${S.online ? `<button id="bRot">🔄 Rotate roles${S.sinceRotate >= 4 ? " (due!)" : ""}</button>` : ""}
+   <button id="bRep">📊 Calibration report</button>${S.online ? `<button class="ghost" id="bLob">Lobby / QR</button>` : ""}
+   <button class="ghost" id="bSet">Setup</button>
+   <span class="legend" style="margin-left:auto">⚖ judgment call · 🔧 hands-on + live task · 🔗 unfolding case · 〰 rhythm strip</span></div>`;
+  app.querySelectorAll("[data-t]").forEach(b => b.onclick = () => openTile(b.dataset.t));
+  const r = document.getElementById("bRot"); if (r) r.onclick = async () => { S.roleRound++; S.sinceRotate = 0; save(); await push({ phase: "board", msg: "Roles rotated: check your phone" }); render(); toast("Roles rotated"); };
+  document.getElementById("bRep").onclick = async () => { await pull(); go("report"); };
+  const l = document.getElementById("bLob"); if (l) l.onclick = async () => { await push({ phase: "lobby" }); go("lobby"); };
+  document.getElementById("bSet").onclick = () => go("setup");
+}
+function fmt(n) { n = n || 0; return (n < 0 ? "−" : "") + Math.abs(n).toLocaleString(); }
+
+// ───────────────────────── question flow ─────────────────────────
+function publicTile(t) {
+  const ch = t.chain ? BANK.chains[t.chain] : null;
+  return { tile: t.id, value: t.value, type: t.type, cat: colName(t.col), stem: t.stem, opts: t.opts, data: t.data || null, visual: !!t.strip, chainTitle: ch ? ch.title : null, chainText: ch ? ch.text : null };
+}
+async function openTile(id) {
+  const t = T(id); const P = S.played[id];
+  if (P && P.done) { if (!confirm("This tile was already played. Re-open it? (Phones will answer again; scores get recalculated.)")) return; }
+  S.played[id] = Object.assign({ manual: {}, checks: {} }, P || {}, { done: false });
+  S.current = id; S.phase = "open";
+  const dur = S.timerDefault + (t.type === "skill" ? 30 : 0) + (id === "FINAL" ? 30 : 0);
+  S.endsAt = Date.now() + dur * 1000; save();
+  await push(Object.assign({ phase: "open", dur }, publicTile(t)));
+  go("q");
+}
+async function lockTile() { S.phase = "locked"; save(); await push(Object.assign({ phase: "locked" }, publicTile(T(S.current)))); await pull(); render(); }
+async function revealTile() {
+  await pull();
+  const id = S.current, t = T(id), P = S.played[id];
+  P.pts = {}; S.teams.forEach(tm => P.pts[tm] = teamTilePts(id, tm).total);
+  P.done = true; S.phase = "reveal"; S.sinceRotate++; save();
+  await push({ phase: "reveal", tile: id, cat: colName(t.col), value: t.value, type: t.type, key: key(id), credit: credit(id) || null, why: t.why, stem: t.stem, opts: t.opts, teamPts: P.pts, totals: totals() });
+  render();
+}
+function vQ() {
+  const id = S.current, t = T(id), P = S.played[id], ph = S.phase;
+  const ch = t.chain ? BANK.chains[t.chain] : null;
+  const k = key(id), cr = credit(id);
+  const A = ansFor(id);
+  const reveal = ph === "reveal";
+  const dist = L => { const a = A.filter(x => x.c === L); const n = A.length || 1;
+    return `<div class="dist">${[1, 2, 3].map(c => { const w = a.filter(x => x.k === c).length / n * 100; return w ? `<i style="width:${w}%;background:${["", "#7f8db5", "#c8a64a", "#ff7a59"][c]}"></i>` : ""; }).join("")}</div>`; };
+  const opts = t.opts.map((o, i) => { const L = LETTERS[i];
+    let cls = "opt"; if (reveal) cls += L === k ? " key" : " dim";
+    const crTag = reveal && t.type === "judge" ? `<span class="cr">${Math.round((cr[L] || 0) * 100)}% credit</span>` : "";
+    const cnt = reveal && S.online ? `<div class="muted" style="font-size:13px;margin-top:4px">${A.filter(x => x.c === L).length} chose this</div>` : "";
+    return `<div class="${cls}"><span class="L">${L}</span><div class="grow">${esc(o)}${reveal && S.online ? dist(L) + cnt : ""}</div>${crTag}</div>`; }).join("");
+  const nt = S.teams.length;
+  const task = t.task ? `<div class="panel"><div style="font-weight:800">🔧 Live task: ${esc(t.task.title)}</div><div class="muted" style="font-size:13px;margin-bottom:8px">${esc(t.task.where)}. Skills lead from each group. Bonus up to ${t.value}.</div>
+    <div class="chk" style="--nt:${nt}"><span></span>${S.teams.map(tm => `<b style="color:${CCR.teams[tm].color};text-align:center">${tm}</b>`).join("")}
+    ${t.task.items.map((it, i) => `<span>${esc(it)}</span>${S.teams.map(tm => `<input type="checkbox" data-ck="${tm}:${i}" ${P.checks[tm] && P.checks[tm][i] ? "checked" : ""}>`).join("")}`).join("")}</div></div>` : "";
+  const manual = `<details class="panel" ${S.online ? "" : "open"}><summary style="cursor:pointer;font-weight:700">🪧 Paddle / manual scoring${S.online ? " (fallback)" : ""}</summary>
+    <div class="muted" style="font-size:13px;margin:6px 0">Teams hold up a letter card + a 1/2/3 confidence card. Tap them in. Manual entries override phone answers for that team.</div>
+    ${S.teams.map(tm => { const m = P.manual[tm] || {}; return `<div class="row" style="margin:6px 0;gap:4px;flex-wrap:nowrap"><b style="color:${CCR.teams[tm].color};width:18px">${tm}</b>
+      ${LETTERS.map(L => `<button data-mc="${tm}:${L}" style="padding:4px 7px;${m.c === L ? "background:var(--gold);color:#111" : ""}">${L}</button>`).join("")}
+      <span class="muted">|</span>${[1, 2, 3].map(c => `<button data-mk="${tm}:${c}" style="padding:4px 7px;${m.k === c ? "background:var(--gold);color:#111" : ""}">${c}</button>`).join("")}
+      ${m.c ? `<button class="ghost" data-mx="${tm}" style="padding:2px 8px">clear</button>` : ""}</div>`; }).join("")}</details>`;
+  const teamRes = reveal ? `<div class="panel"><div style="font-weight:800;margin-bottom:6px">This tile</div>${S.teams.map(tm => { const r = teamTilePts(id, tm); return `<div class="cnt"><span style="color:${CCR.teams[tm].color};font-weight:800">Group ${tm}</span><span><b>${fmt(r.total)}</b>${r.bonus ? ` <span class="muted" style="font-size:13px">(${fmt(r.base)} + 🔧${r.bonus})</span>` : ""}</span></div>`; }).join("")}
+     ${S.online ? `<div class="legend" style="margin-top:8px"><span><i class="sw" style="background:#7f8db5"></i>guessing</span><span><i class="sw" style="background:#c8a64a"></i>fairly sure</span><span><i class="sw" style="background:#ff7a59"></i>certain</span></div>` : ""}</div>` : "";
+  const side = `<div class="side">
+    ${!reveal ? `<div class="panel"><div class="timer" id="tmr">--</div><div id="counts"></div>
+      <div class="row" style="margin-top:10px">${ph === "open" ? `<button id="bPlus">+15 s</button><button class="pri grow" id="bLock">Lock answers</button>` : `<button class="gold grow" id="bRev">Reveal answer</button>`}</div></div>` : ""}
+    ${teamRes}${task}${!reveal || !S.online ? manual : ""}
+    ${reveal ? `<div class="row"><button class="pri grow" id="bBoard">Back to board →</button></div><div class="row" style="margin-top:8px"><button class="ghost grow" id="bRe">Re-open tile</button></div>` : `<button class="ghost" id="bCancel" style="width:100%;margin-top:6px">Cancel tile (back to board)</button>`}
+  </div>`;
+  const pills = `<span class="pill">${esc(colName(t.col))}</span><span class="pill val">${t.value}</span>${t.type === "judge" ? `<span class="pill judge">⚖ Judgment call: best-answer credit, no multiplier</span>` : ""}${t.type === "skill" ? `<span class="pill skill">🔧 Hands-on</span>` : ""}${ch ? `<span class="pill chain">🔗 Unfolding case</span>` : ""}`;
+  app.innerHTML = `<div class="qwrap"><div>
+    <div class="qhead">${pills}</div>
+    ${ch ? `<div class="case"><b>${esc(ch.title)}</b>: ${esc(ch.text)}</div>` : ""}
+    <div class="stem">${esc(t.stem)}</div>
+    ${t.strip ? `<div style="margin-bottom:14px">${ecgStrip(t.strip)}</div>` : ""}
+    ${t.data ? `<div class="data">${t.data.map(d => `<div><b>${esc(d[0])}</b>${esc(d[1])}</div>`).join("")}</div>` : ""}
+    <div class="opts">${opts}</div>
+    ${t.type === "judge" && !reveal ? `<div class="deb">😈 <b>Devil's advocate:</b> before we lock, make the strongest case for a DIFFERENT answer.</div>` : ""}
+    ${reveal ? `<div class="why">✅ <b>${k}.</b> ${esc(t.why)}</div>${t.debrief ? `<div class="deb">💬 <b>Debrief (Charge nurse answers for the group):</b> ${esc(t.debrief)}</div>` : ""}` : ""}
+  </div>${side}</div>`;
+  // wire
+  const $ = s => document.getElementById(s);
+  if ($("bPlus")) $("bPlus").onclick = async () => { S.endsAt = Math.max(S.endsAt, Date.now()) + 15000; save(); await push(Object.assign({ phase: "open", dur: Math.round((S.endsAt - Date.now()) / 1000) }, publicTile(t))); };
+  if ($("bLock")) $("bLock").onclick = lockTile;
+  if ($("bRev")) $("bRev").onclick = revealTile;
+  if ($("bBoard")) $("bBoard").onclick = async () => { S.current = null; S.phase = null; save(); await push({ phase: "board", msg: S.sinceRotate >= 4 ? "Roles may rotate soon" : "" }); go("board"); };
+  if ($("bRe")) $("bRe").onclick = () => openTile(id);
+  if ($("bCancel")) $("bCancel").onclick = async () => { if (!confirm("Cancel this tile? Answers so far are kept, but it won't be scored.")) return; delete S.played[id].done; if (!S.played[id].pts) delete S.played[id]; S.current = null; save(); await push({ phase: "board" }); go("board"); };
+  app.querySelectorAll("[data-ck]").forEach(c => c.onchange = () => { const [tm, i] = c.dataset.ck.split(":"); (P.checks[tm] = P.checks[tm] || [])[+i] = c.checked; if (reveal) { P.pts[tm] = teamTilePts(id, tm).total; } save(); if (reveal) render(); });
+  app.querySelectorAll("[data-mc]").forEach(b => b.onclick = () => { const [tm, L] = b.dataset.mc.split(":"); P.manual[tm] = Object.assign({ k: 1 }, P.manual[tm], { c: L }); save(); afterManual(); });
+  app.querySelectorAll("[data-mk]").forEach(b => b.onclick = () => { const [tm, c] = b.dataset.mk.split(":"); P.manual[tm] = Object.assign({}, P.manual[tm], { k: +c }); save(); afterManual(); });
+  app.querySelectorAll("[data-mx]").forEach(b => b.onclick = () => { delete P.manual[b.dataset.mx]; save(); afterManual(); });
+  function afterManual() { if (reveal) S.teams.forEach(tm => P.pts[tm] = teamTilePts(id, tm).total); save(); render(); }
+  if (!reveal) {
+    if (S.online && ph === "open") startPoll(2000); else stopPoll();
+    const tmr = $("tmr");
+    const upd = () => { if (S.phase !== "open") { tmr.textContent = "LOCKED"; tmr.className = "timer"; return; }
+      const s = Math.max(0, Math.ceil((S.endsAt - Date.now()) / 1000)); tmr.textContent = s; tmr.className = "timer" + (s <= 10 ? " low" : "");
+      if (s <= 0) { clearInterval(tick); lockTile(); } };
+    upd(); tick = setInterval(upd, 250); liveCounts();
+  } else stopPoll();
+}
+function liveCounts() {
+  const el = document.getElementById("counts"); if (!el) return;
+  if (!S.online) { el.innerHTML = `<div class="muted" style="text-align:center">Paddles up when time's called</div>`; return; }
+  const A = ansFor(S.current);
+  el.innerHTML = S.teams.map(tm => { const ms = members(tm); const n = ms.filter(p => A.some(a => a.p === p.id)).length;
+    return `<div class="cnt"><span style="color:${CCR.teams[tm].color};font-weight:800">Group ${tm}</span><span>${n} / ${ms.length} in</span></div>`; }).join("");
+}
+
+// ───────────────────────── report ─────────────────────────
+function scoredAnswers() { // individual answers on played, non-judgment tiles
+  return S.answers.filter(a => { const t = T(a.t); return t && t.type !== "judge" && S.played[a.t] && S.played[a.t].done; })
+    .map(a => Object.assign({ ok: a.c === key(a.t), team: (S.players.find(p => p.id === a.p) || {}).team }, a));
+}
+function manualAnswers() { const out = []; Object.keys(S.played).forEach(id => { const P = S.played[id], t = T(id); if (!P.done || t.type === "judge") return; Object.keys(P.manual || {}).forEach(tm => { const m = P.manual[tm]; if (m.c) out.push({ t: id, c: m.c, k: m.k || 1, ok: m.c === key(id), team: tm, p: "team-" + tm }); }); }); return out; }
+function vReport() {
+  stopPoll();
+  const tot = totals();
+  const SA = S.online ? scoredAnswers() : manualAnswers();
+  const byConf = [1, 2, 3].map(c => { const a = SA.filter(x => x.k === c); return { c, n: a.length, pct: a.length ? Math.round(a.filter(x => x.ok).length / a.length * 100) : null }; });
+  const ideal = { 1: "well-calibrated ≈ 50%", 2: "well-calibrated ≈ 75%", 3: "well-calibrated ≥ 95%: anything less is risky" };
+  const haz = S.teams.map(tm => { const a = SA.filter(x => x.team === tm); const h = a.filter(x => x.k === 3 && !x.ok).length; return { tm, n: a.length, h, pct: a.length ? Math.round(h / a.length * 100) : 0 }; });
+  const tiles = [...new Set(SA.map(x => x.t))].map(id => { const a = SA.filter(x => x.t === id); const cw = a.filter(x => !x.ok && x.k >= 2); const wrongs = {}; cw.forEach(x => wrongs[x.c] = (wrongs[x.c] || 0) + 1);
+    const top = Object.keys(wrongs).sort((p, q) => wrongs[q] - wrongs[p])[0]; return { id, n: a.length, cw: cw.length, top, acc: Math.round(a.filter(x => x.ok).length / a.length * 100) }; })
+    .filter(x => x.cw > 0).sort((p, q) => q.cw - p.cw).slice(0, 6);
+  const cats = [...BANK.columns.map(c => c.id), "FINAL"].map(cid => { const a = SA.filter(x => T(x.t).col === cid); return { cid, n: a.length, acc: a.length ? Math.round(a.filter(x => x.ok).length / a.length * 100) : null, haz: a.filter(x => x.k === 3 && !x.ok).length }; }).filter(x => x.n);
+  const judges = BANK.tiles.filter(t => t.type === "judge" && S.played[t.id] && S.played[t.id].done).map(t => { const a = S.online ? ansFor(t.id) : Object.values(S.played[t.id].manual || {}).filter(m => m.c); return { t, n: a.length, best: a.filter(x => x.c === key(t.id)).length }; });
+  const bar = (pct, col) => `<div class="t"><i style="width:${pct || 0}%;background:${col}"></i></div>`;
+  app.innerHTML = `<div class="row"><div class="big grow" style="font-weight:800">📊 Calibration report</div>
+    <button id="bB">← Board</button>${S.online ? `<button class="ghost" id="bF">Faculty view (individual)</button>` : ""}<button class="ghost" id="bCsv">Download CSV</button><button class="gold" id="bEnd">End game → send results to phones</button></div>
+  <div class="scores" style="grid-template-columns:repeat(${S.teams.length},1fr)">${S.teams.map(tm => `<div class="team" style="border-color:${CCR.teams[tm].color}"><b>Group ${tm}</b><div class="pts">${fmt(tot[tm])}</div></div>`).join("")}</div>
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
+   <div class="panel"><div style="font-weight:800;font-size:20px">Does our confidence match our accuracy?</div><div class="muted" style="font-size:14px">% correct at each confidence level (cohort, ${SA.length} ${S.online ? "individual" : "team"} answers; judgment tiles excluded)</div>
+    <div class="bars">${byConf.map(b => `<div class="b"><span>${CCR.conf[b.c].label} <span class="muted">(${b.n})</span></span>${bar(b.pct, ["", "#7f8db5", "#c8a64a", "#ff7a59"][b.c])}<b>${b.pct == null ? "–" : b.pct + "%"}</b></div><div class="muted" style="font-size:12px;margin:-4px 0 6px 160px">${ideal[b.c]}</div>`).join("")}</div></div>
+   <div class="panel"><div style="font-weight:800;font-size:20px">⚠ Hazardous misconceptions</div><div class="muted" style="font-size:14px">"Certain" AND wrong: the answers most likely to reach a patient</div>
+    <div class="bars">${haz.map(h => `<div class="b"><span style="color:${CCR.teams[h.tm].color};font-weight:800">Group ${h.tm}</span>${bar(h.pct * 3, "#ff5d5d")}<b>${h.h} <span class="muted" style="font-weight:400">(${h.pct}%)</span></b></div>`).join("")}</div></div>
+   <div class="panel"><div style="font-weight:800;font-size:20px">🎯 Re-teach before the exam</div><div class="muted" style="font-size:14px">Tiles with the most confident (fairly sure or certain) wrong answers</div>
+    ${tiles.length ? `<table><tr><th>Tile</th><th>Topic</th><th>% right</th><th>Confident-wrong</th><th>Top wrong pick</th></tr>${tiles.map(x => { const t = T(x.id); return `<tr><td>${esc(colName(t.col))} ${t.value}</td><td>${esc(t.stem.slice(0, 70))}…</td><td>${x.acc}%</td><td><b style="color:var(--bad)">${x.cw}</b></td><td>${x.top}. ${esc(t.opts[LETTERS.indexOf(x.top)].slice(0, 40))}</td></tr>`; }).join("")}</table>` : `<p class="muted">No confident-wrong answers yet 🎉</p>`}</div>
+   <div class="panel"><div style="font-weight:800;font-size:20px">By system</div>
+    <table><tr><th>Category</th><th>% correct</th><th>Certain-wrong</th></tr>${cats.map(c => `<tr><td>${esc(colName(c.cid))}</td><td>${c.acc}%</td><td>${c.haz}</td></tr>`).join("")}</table>
+    ${judges.length ? `<div style="font-weight:800;margin-top:12px">⚖ Judgment calls: chose the best action</div><table>${judges.map(j => `<tr><td>${esc(colName(j.t.col))} ${j.t.value}</td><td>${j.n ? Math.round(j.best / j.n * 100) + "%" : "–"} <span class="muted">(${j.best}/${j.n})</span></td></tr>`).join("")}</table>` : ""}</div>
+  </div>`;
+  document.getElementById("bB").onclick = () => go("board");
+  const f = document.getElementById("bF"); if (f) f.onclick = () => go("faculty");
+  document.getElementById("bCsv").onclick = csv;
+  document.getElementById("bEnd").onclick = async () => { await push({ phase: "end", totals: totals(), keys: Object.fromEntries(Object.keys(S.played).filter(id => S.played[id].done).map(id => [id, { k: key(id), cr: credit(id) || null, value: T(id).value, type: T(id).type, cat: colName(T(id).col), stem: T(id).stem }])) }); toast(S.online ? "Personal results sent to phones" : "Game ended"); };
+}
+function vFaculty() {
+  const rows = S.players.map(p => { const a = S.answers.filter(x => x.p === p.id && T(x.t) && T(x.t).type !== "judge" && S.played[x.t] && S.played[x.t].done); const ok = a.filter(x => x.c === key(x.t)).length;
+    const hz = a.filter(x => x.k === 3 && x.c !== key(x.t)).length; const mc = a.length ? (a.reduce((s, x) => s + x.k, 0) / a.length) : 0;
+    const miss = a.filter(x => x.c !== key(x.t) && x.k >= 2).map(x => colName(T(x.t).col) + " " + T(x.t).value);
+    const acc = a.length ? Math.round(ok / a.length * 100) : null; const expected = a.length ? Math.round(a.reduce((s, x) => s + [0, 50, 75, 95][x.k], 0) / a.length) : null;
+    return { p, n: a.length, acc, hz, mc, gap: acc == null ? null : expected - acc, miss }; });
+  app.innerHTML = `<div class="row"><div class="big grow" style="font-weight:800">Faculty view: individual calibration</div><button id="bR">← Report</button></div>
+  <div class="warn" style="margin:10px 0">Not for the projector. This is for coaching conversations. Gap = how much more confident they were than accurate (positive = overconfident).</div>
+  <div class="panel"><table><tr><th>Nickname</th><th>Group</th><th>Answered</th><th>% correct</th><th>Avg conf</th><th>Overconfidence gap</th><th>Certain-wrong</th><th>Confident misses (review these)</th></tr>
+  ${rows.sort((a, b) => b.hz - a.hz).map(r => `<tr><td>${esc(r.p.nick)}</td><td>${r.p.team}</td><td>${r.n}</td><td>${r.acc == null ? "–" : r.acc + "%"}</td><td>${r.mc ? r.mc.toFixed(1) : "–"}</td><td>${r.gap == null ? "–" : (r.gap > 0 ? "+" : "") + r.gap}</td><td style="color:${r.hz ? "var(--bad)" : "inherit"};font-weight:700">${r.hz}</td><td class="muted">${esc(r.miss.join(", "))}</td></tr>`).join("")}</table></div>`;
+  document.getElementById("bR").onclick = () => go("report");
+}
+function csv() {
+  const L = [["game", "nickname", "group", "tile", "category", "value", "type", "choice", "confidence", "correct_key", "correct", "points"]];
+  S.answers.forEach(a => { const p = S.players.find(x => x.id === a.p) || {}; const t = T(a.t); if (!t) return;
+    L.push([S.code, p.nick, p.team, a.t, colName(t.col), t.value, t.type, a.c, a.k, key(a.t), a.c === key(a.t) ? 1 : 0, scoreAnswer(t, a.c, a.k, key(a.t), credit(a.t))]); });
+  Object.keys(S.played).forEach(id => { const P = S.played[id], t = T(id); Object.keys(P.manual || {}).forEach(tm => { const m = P.manual[tm]; if (m.c) L.push([S.code || "offline", "(paddle)", tm, id, colName(t.col), t.value, t.type, m.c, m.k, key(id), m.c === key(id) ? 1 : 0, scoreAnswer(t, m.c, m.k, key(id), credit(id))]); }); });
+  const blob = new Blob([L.map(r => r.map(v => `"${String(v == null ? "" : v).replace(/"/g, '""')}"`).join(",")).join("\n")], { type: "text/csv" });
+  const a = document.createElement("a"); a.href = URL.createObjectURL(blob); a.download = `ccc-final-review-${S.code || "offline"}-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
+}
+if (S.online && S.code) { pull().then(render); } else render();
+</script>
+</body>
+</html>

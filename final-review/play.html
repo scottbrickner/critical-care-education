@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="theme-color" content="#0f1420">
+<title>Final Review · Play</title>
+<style>
+:root{--bg:#0f1420;--panel:#171e2e;--panel2:#1f2840;--line:#2c3757;--ink:#eef2fb;--mute:#9aa6c4;--card:#990000;--gold:#ffcc00;--ok:#3ccf7d;--bad:#ff5d5d}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;background:var(--bg);color:var(--ink);font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif}
+main{padding:14px;max-width:560px;margin:0 auto;padding-bottom:110px}
+button{font:inherit;border:0;border-radius:12px;padding:14px;background:var(--panel2);color:var(--ink);width:100%;text-align:left}
+button:disabled{opacity:.4}
+input{font:inherit;width:100%;padding:14px;border-radius:12px;border:1px solid var(--line);background:#0b0f19;color:var(--ink);font-size:18px}
+.top{display:flex;justify-content:space-between;align-items:center;padding:10px 14px;background:#0b0f19;border-bottom:1px solid var(--line);font-size:14px;position:sticky;top:0;z-index:3}
+.badge{border-radius:999px;padding:3px 10px;font-weight:800;color:#111}
+.muted{color:var(--mute)}h2{margin:.2em 0 .4em;font-size:22px}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;margin:10px 0}
+.stem{font-size:19px;font-weight:700;line-height:1.3;margin:8px 0}
+.case{background:#2a2115;border:1px solid #5c4520;border-radius:12px;padding:8px 12px;font-size:14px}
+.data{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin:8px 0}.data div{background:var(--panel2);border-radius:8px;padding:6px 8px;font-size:14px}.data b{display:block;font-size:11px;color:var(--mute)}
+.opt{display:flex;gap:10px;margin:8px 0;border:2px solid transparent;font-size:16px;line-height:1.3}.opt .L{font-weight:900;color:var(--gold);min-width:1.1em}
+.opt.sel{border-color:var(--gold);background:#3a3313}.opt.key{border-color:var(--ok);background:#13321f}.opt.mine{border-color:var(--bad)}
+.conf{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.conf button{text-align:center;padding:12px 6px;font-size:14px;border:2px solid transparent}.conf button b{display:block;font-size:16px}.conf button small{color:var(--mute)}
+.conf button.sel{border-color:var(--gold);background:#3a3313}
+.go{position:fixed;left:0;right:0;bottom:0;padding:12px 14px calc(12px + env(safe-area-inset-bottom));background:#0b0f19ee;border-top:1px solid var(--line)}
+.go button{background:var(--card);color:#fff;font-weight:800;text-align:center;font-size:18px;max-width:560px;margin:0 auto;display:block}
+.timer{font-family:Consolas,monospace;font-weight:900}
+.teams{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.teams button{text-align:center;font-weight:900;font-size:22px;border:3px solid transparent}
+.res{font-size:34px;font-weight:900;text-align:center;margin:8px 0}
+.why{background:#13321f;border:1px solid #2b6b45;border-radius:12px;padding:12px;font-size:15px;line-height:1.35}
+.role{background:#2a2346;border:1px solid #4a3b8f;border-radius:12px;padding:12px;font-size:16px}
+.bars div{display:grid;grid-template-columns:96px 1fr 44px;gap:8px;align-items:center;margin:6px 0;font-size:14px}.bars i{display:block;height:16px;border-radius:5px}
+.big{font-size:56px;text-align:center}
+</style>
+</head>
+<body>
+<div class="top" id="top"></div>
+<main id="app"><p class="muted">Loading…</p></main>
+<div class="go" id="go" style="display:none"></div>
+<script>// Shared config + backend helpers (host and player)
+const CCR = {
+  url: "https://ixzjhchfgicxgaqhmkku.supabase.co",
+  key: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Iml4empoY2hmZ2ljeGdhcWhta2t1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODc1MDkxNTUsImV4cCI6MjEwMzA4NTE1NX0.xcxkBg77-yDrCIgJ9WER672DGeORiaPf0KXK7gcduKc",
+  playBase: "https://scottbrickner.github.io/critical-care-education/final-review/play.html",
+  teams: { A: { name: "Team A", color: "#2bb3a3" }, B: { name: "Team B", color: "#f2a93b" }, C: { name: "Team C", color: "#9b7bea" }, D: { name: "Team D", color: "#e8607a" } },
+  conf: { 1: { label: "Guessing", mult: "×1", stake: "+1× / 0" }, 2: { label: "Fairly sure", mult: "×2", stake: "+2× / −2×" }, 3: { label: "Certain", mult: "×3", stake: "+3× / −6×" } },
+  roles: ["Charge", "Skills lead", "Devil's advocate"]
+};
+async function rpc(fn, args) {
+  const r = await fetch(CCR.url + "/rest/v1/rpc/" + fn, {
+    method: "POST",
+    headers: { apikey: CCR.key, Authorization: "Bearer " + CCR.key, "Content-Type": "application/json" },
+    body: JSON.stringify(args || {})
+  });
+  const t = await r.text();
+  let j = null; try { j = t ? JSON.parse(t) : null; } catch (e) { j = t; }
+  if (!r.ok) throw new Error((j && j.message) || ("HTTP " + r.status));
+  return j;
+}
+// Certainty-based marking (Gardner-Medwin): right +1/+2/+3, wrong 0/-2/-6 (x tile value)
+function scoreAnswer(tile, choice, conf, key, credit) {
+  if (!choice) return 0;
+  if (tile.type === "judge") return Math.round(tile.value * ((credit && credit[choice]) || 0));
+  if (choice === key) return tile.value * conf;
+  return conf === 1 ? 0 : conf === 2 ? -2 * tile.value : -6 * tile.value;
+}
+function esc(s) { return String(s == null ? "" : s).replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c])); }
+const LETTERS = ["A", "B", "C", "D"];
+</script>
+<script>
+const qs = new URLSearchParams(location.search);
+let code = (qs.get("c") || "").toUpperCase().trim();
+let me = null, st = null, lastSeq = -1, openSeenAt = 0, openSeq = -1;
+let draft = { c: null, k: null };
+let mine = {}; // tile -> {c,k,sent}
+let results = {}; // tile -> {pts, ok, cat, value, type, k}
+const app = document.getElementById("app"), go = document.getElementById("go"), topEl = document.getElementById("top");
+const store = () => "ccr_player_" + code;
+function loadMe() { try { const j = JSON.parse(localStorage.getItem(store())); if (j) { me = j.me; mine = j.mine || {}; results = j.results || {}; } } catch (e) { } }
+function saveMe() { try { localStorage.setItem(store(), JSON.stringify({ me, mine, results })); } catch (e) { } }
+function bar() {
+  if (!me) { topEl.innerHTML = `<b>Final Review</b><span class="muted">Jeopardy+</span>`; return; }
+  const tc = CCR.teams[me.team].color; const total = Object.values(results).reduce((s, r) => s + r.pts, 0);
+  topEl.innerHTML = `<span><span class="badge" style="background:${tc}">${me.team}</span> <b>${esc(me.nick)}</b></span><span class="muted">your points (private): <b style="color:var(--ink)">${total.toLocaleString()}</b></span>`;
+}
+function vJoin(err) {
+  go.style.display = "none";
+  app.innerHTML = `<h2>Join the review game</h2>
+  ${err ? `<div class="panel" style="border-color:var(--bad)">${esc(err)}</div>` : ""}
+  <div class="panel"><label class="muted">Room code</label><input id="jc" maxlength="4" autocapitalize="characters" value="${esc(code)}" style="text-transform:uppercase;letter-spacing:6px;font-weight:900;text-align:center;font-size:26px"></div>
+  <div class="panel"><label class="muted">Nickname or initials. The screen only shows team scores.</label><input id="jn" maxlength="24" placeholder="e.g. JB or CodeBlue"></div>
+  <div class="panel"><div class="muted" style="margin-bottom:8px">Your group</div><div class="teams" id="jt">${["A", "B", "C"].map(t => `<button data-t="${t}" style="color:${CCR.teams[t].color}">${t}</button>`).join("")}</div></div>
+  <button id="jgo" style="background:var(--card);color:#fff;text-align:center;font-weight:800;font-size:18px">Join</button>`;
+  let team = null;
+  app.querySelectorAll("[data-t]").forEach(b => b.onclick = () => { team = b.dataset.t; app.querySelectorAll("[data-t]").forEach(x => x.style.borderColor = x === b ? CCR.teams[team].color : "transparent"); });
+  document.getElementById("jgo").onclick = async () => {
+    const c = document.getElementById("jc").value.toUpperCase().trim(), n = document.getElementById("jn").value.trim();
+    if (c.length !== 4) return vJoin("Enter the 4-character room code from the screen.");
+    if (!n) return vJoin("Add a nickname.");
+    if (!team) return vJoin("Pick your group (A, B or C).");
+    try { const id = await rpc("ccr_join", { p_code: c, p_nick: n, p_team: team });
+      code = c; me = { id, nick: n, team }; mine = {}; results = {}; saveMe(); history.replaceState(null, "", "?c=" + c); bar(); poll(); }
+    catch (e) { vJoin(/no game/.test(e.message) ? "No game with that code. Check the screen." : "Couldn't join: " + e.message); }
+  };
+}
+async function restore() { try { const a = await rpc("ccr_my_answers", { p_code: code, p_player: me.id }); a.forEach(x => { mine[x.t] = { c: x.c, k: x.k, sent: true }; }); saveMe(); } catch (e) { } }
+async function poll() {
+  try {
+    const r = await rpc("ccr_get_state", { p_code: code });
+    if (!r) { me = null; localStorage.removeItem(store()); return vJoin("That game has ended or the code is wrong."); }
+    const s = r.state || {};
+    if (s.seq !== lastSeq) { lastSeq = s.seq; st = s; onState(); }
+    else if (st && st.phase === "open") tickTimer();
+  } catch (e) { topEl.innerHTML = `<span style="color:var(--bad)">Reconnecting…</span>`; }
+  setTimeout(poll, 1500);
+}
+function myRole() { return st && st.roles && me ? st.roles[me.id] : null; }
+function roleCard() { const r = myRole(); if (!r) return "";
+  const tip = { "Charge": "You answer for your group in the debrief.", "Skills lead": "You go up for 🔧 hands-on tasks.", "Devil's advocate": "On ⚖ judgment calls, argue for a different answer before we lock." }[r];
+  return `<div class="role">Your role this round: <b>${r}</b><div class="muted" style="font-size:14px;margin-top:4px">${tip}</div></div>`; }
+function onState() {
+  bar(); const s = st;
+  if (s.phase === "open") {
+    if (openSeq !== s.tile + s.dur) { openSeq = s.tile + s.dur; openSeenAt = Date.now(); }
+    if (draft.tile !== s.tile) { const m = mine[s.tile]; draft = { tile: s.tile, c: m ? m.c : null, k: m ? m.k : null }; }
+    return vOpen();
+  }
+  go.style.display = "none";
+  if (s.phase === "locked") return vLocked();
+  if (s.phase === "reveal") return vReveal();
+  if (s.phase === "end") return vEnd();
+  // lobby / board
+  app.innerHTML = `<div class="big">👀</div><h2 style="text-align:center">Eyes on the big screen</h2><p class="muted" style="text-align:center">${s.phase === "lobby" ? "Waiting for the game to start…" : (s.msg ? esc(s.msg) : "Next question is coming.")}</p>${roleCard()}
+  <div class="panel" style="font-size:14px"><b>Confidence stakes</b><br>${[1, 2, 3].map(k => `${CCR.conf[k].label} ${CCR.conf[k].mult}: ${CCR.conf[k].stake}`).join("<br>")}<div class="muted" style="margin-top:6px">Certain + wrong costs the most. Honest "guessing" is safe.</div></div>`;
+}
+function remain() { return Math.max(0, Math.ceil((st.dur || 60) - (Date.now() - openSeenAt) / 1000)); }
+function tickTimer() { const el = document.getElementById("tmr"); if (el) el.textContent = remain() + "s"; }
+function vOpen() {
+  const s = st, sent = mine[s.tile] && mine[s.tile].sent && mine[s.tile].c === draft.c && mine[s.tile].k === draft.k;
+  app.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:center"><span class="muted">${esc(s.cat)} · ${s.value}${s.type === "judge" ? " · ⚖ judgment" : ""}${s.type === "skill" ? " · 🔧" : ""}</span><span class="timer" id="tmr">${remain()}s</span></div>
+  ${s.chainTitle ? `<div class="case"><b>${esc(s.chainTitle)}</b>: ${esc(s.chainText)}</div>` : ""}
+  <div class="stem">${esc(s.stem)}</div>
+  ${s.visual ? `<div class="panel" style="text-align:center">📺 Look at the rhythm strip on the big screen</div>` : ""}
+  ${s.data ? `<div class="data">${s.data.map(d => `<div><b>${esc(d[0])}</b>${esc(d[1])}</div>`).join("")}</div>` : ""}
+  ${s.opts.map((o, i) => `<button class="opt ${draft.c === LETTERS[i] ? "sel" : ""}" data-c="${LETTERS[i]}"><span class="L">${LETTERS[i]}</span><span>${esc(o)}</span></button>`).join("")}
+  <div class="muted" style="margin:12px 0 6px">How sure are you?${s.type === "judge" ? " (Judgment call: no multiplier, but we still want to know.)" : ""}</div>
+  <div class="conf">${[1, 2, 3].map(k => `<button data-k="${k}" class="${draft.k === k ? "sel" : ""}"><b>${CCR.conf[k].label}</b><small>${s.type === "judge" ? "&nbsp;" : CCR.conf[k].stake}</small></button>`).join("")}</div>
+  ${roleCard()}`;
+  app.querySelectorAll("[data-c]").forEach(b => b.onclick = () => { draft.c = b.dataset.c; vOpen(); });
+  app.querySelectorAll("[data-k]").forEach(b => b.onclick = () => { draft.k = +b.dataset.k; vOpen(); });
+  go.style.display = "block";
+  go.innerHTML = `<button id="sub" ${draft.c && draft.k ? "" : "disabled"}>${sent ? "✓ Locked in · tap an option to change" : (draft.c && draft.k ? `Submit ${draft.c} · ${CCR.conf[draft.k].label}` : "Pick an answer + confidence")}</button>`;
+  document.getElementById("sub").onclick = async () => {
+    if (!draft.c || !draft.k) return;
+    const b = document.getElementById("sub"); b.disabled = true; b.textContent = "Sending…";
+    try { const r = await rpc("ccr_submit", { p_code: code, p_player: me.id, p_tile: s.tile, p_choice: draft.c, p_conf: draft.k });
+      if (r === "ok") { mine[s.tile] = { c: draft.c, k: draft.k, sent: true }; saveMe(); if (navigator.vibrate) navigator.vibrate(30); }
+      else if (r === "closed") { b.textContent = "Time's up: answers are locked"; return; }
+      else if (r === "no player") { me = null; localStorage.removeItem(store()); return vJoin("You were removed from the game. Rejoin."); }
+    } catch (e) { b.textContent = "Didn't send. Tap to retry"; b.disabled = false; return; }
+    vOpen();
+  };
+}
+function vLocked() {
+  const m = mine[st.tile];
+  app.innerHTML = `<div class="big">🔒</div><h2 style="text-align:center">Answers locked</h2>
+  <div class="panel" style="text-align:center;font-size:18px">${m && m.sent ? `You said <b>${m.c}</b> · ${CCR.conf[m.k].label}` : `<span class="muted">No answer this time (scores 0)</span>`}</div>${roleCard()}`;
+}
+function vReveal() {
+  const s = st, m = mine[s.tile];
+  const t = { type: s.type, value: s.value };
+  const pts = m && m.sent ? scoreAnswer(t, m.c, m.k, s.key, s.credit) : 0;
+  const ok = m && m.c === s.key;
+  results[s.tile] = { pts, ok: !!ok, answered: !!(m && m.sent), k: m ? m.k : null, type: s.type, value: s.value, cat: s.cat || "", stem: s.stem };
+  saveMe(); bar();
+  const msg = !m || !m.sent ? "No answer" : s.type === "judge" ? (ok ? "Best action ⚖" : (s.credit && s.credit[m.c] ? "Partial credit" : "Not the best action")) : ok ? "Correct!" : (m.k === 3 ? "Certain, and wrong. Flag this one." : "Not this time");
+  app.innerHTML = `<div class="res" style="color:${ok ? "var(--ok)" : (pts < 0 ? "var(--bad)" : "var(--ink)")}">${msg}</div>
+  <div style="text-align:center;font-size:22px;font-weight:800">${pts > 0 ? "+" : ""}${pts.toLocaleString()} pts</div>
+  <div class="stem" style="font-size:16px">${esc(s.stem)}</div>
+  ${s.opts.map((o, i) => { const L = LETTERS[i]; return `<div class="opt panel ${L === s.key ? "key" : (m && m.c === L ? "mine" : "")}" style="margin:6px 0;padding:10px"><span class="L">${L}</span><span>${esc(o)}${m && m.c === L ? ` <span class="muted">(you, ${CCR.conf[m.k].label.toLowerCase()})</span>` : ""}</span></div>`; }).join("")}
+  <div class="why">${esc(s.why)}</div>${roleCard()}`;
+}
+function vEnd() {
+  const R = Object.values(results).filter(r => r.type !== "judge" && r.answered);
+  const lvl = [1, 2, 3].map(k => { const a = R.filter(r => r.k === k); return { k, n: a.length, pct: a.length ? Math.round(a.filter(r => r.ok).length / a.length * 100) : null }; });
+  const haz = Object.entries(results).filter(([id, r]) => r.type !== "judge" && r.answered && !r.ok && r.k >= 2);
+  const total = Object.values(results).reduce((s, r) => s + r.pts, 0);
+  app.innerHTML = `<h2>Your private calibration</h2><div class="muted">Only you see this. Faculty see a coaching summary.</div>
+  <div class="panel" style="text-align:center"><div class="muted">Your points</div><div class="res">${total.toLocaleString()}</div></div>
+  <div class="panel"><b>When you said…</b><div class="bars">${lvl.map(l => `<div><span>${CCR.conf[l.k].label}</span><span style="background:#0004;border-radius:5px"><i style="width:${l.pct || 0}%;background:${["", "#7f8db5", "#c8a64a", "#ff7a59"][l.k]}"></i></span><b>${l.pct == null ? "–" : l.pct + "%"}</b></div>`).join("")}</div>
+  <div class="muted" style="font-size:13px">Well-calibrated looks like: guessing ≈ 50%, fairly sure ≈ 75%, certain ≈ 95%+.</div></div>
+  <div class="panel"><b>🎯 Review before the exam</b><div class="muted" style="font-size:13px;margin-bottom:6px">You were fairly sure or certain on these and missed them. These are the ones to fix.</div>
+  ${haz.length ? haz.map(([id, r]) => `<div style="margin:8px 0;font-size:15px">${r.k === 3 ? "⚠️" : "•"} <b>${esc(r.cat)} ${r.value}</b>: ${esc(r.stem)}</div>`).join("") : `<div>None. Your confidence matched your knowledge. 🎉</div>`}</div>
+  <div class="panel muted" style="font-size:14px">Screenshot this page if you want to keep it.</div>`;
+}
+loadMe(); bar();
+if (code && me) { restore().then(poll); } else vJoin();
+</script>
+</body>
+</html>
