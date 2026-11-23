@@ -11,7 +11,7 @@ All items are original. The commercial practice exam was used only as a blueprin
 
 | Time | What |
 |---|---|
-| 1300–1308 | Lobby. Residents scan the QR, enter a nickname, and pick **Group A/B/C** (the same groups as this morning's stations). Explain confidence stakes. |
+| 1300–1308 | Lobby. Residents scan the QR, enter their **first and last name**, and pick **Group A/B/C** (the same groups as this morning's stations). Explain confidence stakes. |
 | 1308 | **🎲 Opening toss-up.** One pop-culture question, no points. The group with the highest % correct gets the board, and a tie triggers a spin. |
 | 1310–1405 | Board. Roughly 20 of the 24 tiles, about 2.5 min each. Hit **Rotate roles** whenever it says *(due!)*, every 4 tiles. |
 | 1405–1412 | ★ Final (500). |
@@ -37,7 +37,8 @@ All items are original. The commercial practice exam was used only as a blueprin
 
 - **Roles** (rotate every 4 tiles): *Charge* answers the debrief prompt for the group. *Skills lead* goes up for 🔧. *Devil's advocate* argues for a different answer on ⚖ tiles.
 - Hands-on equipment to stage: **5392 or the pacemaker sim** (Hands-On 400), **vasoactive sim/pump** (Hands-On 100), **transducer/hemo sim** (Hands-On 300). A faculty member plays the neuro-check patient (Hands-On 200).
-- **What residents are told:** individual answers stay in the background and only roll up into the group score and the class report. Individual data never goes on the projector. *Faculty view* (per nickname) and *Download CSV* exist for your own post-session review, so keep them off the projector.
+- **What residents are told:** only group scores show on screen. Faculty can see individual results afterward to plan exam prep, and it's practice, not graded. Individual data never goes on the projector. *Faculty view* (by name) and *Download CSV* are for post-session review.
+- **Where results live:** Supabase tables `ccr_players` + `ccr_answers`, keyed by room code. **Write down the room code** and click **Download CSV** before leaving. Claude can pull and score any session by its code.
 - **If Wi-Fi dies:** open the *🪧 Paddle / manual scoring* drawer on any tile. Groups hold up a letter card plus a 1/2/3 card, and you tap them in. Manual entries override phone answers for that group. Or start in **Offline: paddle cards only** from Setup.
 - Refreshing the host page is safe: the game state is saved in the browser. Phones reconnect on their own.
 - Pacing items follow the unit standards: output at 2× the capture threshold, sensitivity at ≤ ½ the sensing threshold, escalate when troubleshooting is exhausted, never unplug the cables to check the underlying rhythm.
