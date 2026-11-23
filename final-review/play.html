@@ -89,7 +89,7 @@ function vJoin(err) {
   app.innerHTML = `<h2>Join the review game</h2>
   ${err ? `<div class="panel" style="border-color:var(--bad)">${esc(err)}</div>` : ""}
   <div class="panel"><label class="muted">Room code</label><input id="jc" maxlength="4" autocapitalize="characters" value="${esc(code)}" style="text-transform:uppercase;letter-spacing:6px;font-weight:900;text-align:center;font-size:26px"></div>
-  <div class="panel"><label class="muted">Nickname or initials. The screen only shows group scores. Your answers stay in the background and roll up into your group’s score.</label><input id="jn" maxlength="24" placeholder="e.g. JB or CodeBlue"></div>
+  <div class="panel"><label class="muted">First and last name</label><input id="jn" maxlength="48" autocomplete="name" autocapitalize="words" placeholder="e.g. Jordan Bell"><div class="muted" style="font-size:13px;margin-top:8px">Only group scores show on screen. Faculty can see individual results afterward to plan exam prep. It’s practice, not graded, so answer honestly, especially your confidence.</div></div>
   <div class="panel"><div class="muted" style="margin-bottom:8px">Your group</div><div class="teams" id="jt">${["A", "B", "C"].map(t => `<button data-t="${t}" style="color:${CCR.teams[t].color}">${t}</button>`).join("")}</div></div>
   <button id="jgo" style="background:var(--card);color:#fff;text-align:center;font-weight:800;font-size:18px">Join</button>`;
   let team = null;
@@ -97,7 +97,7 @@ function vJoin(err) {
   document.getElementById("jgo").onclick = async () => {
     const c = document.getElementById("jc").value.toUpperCase().trim(), n = document.getElementById("jn").value.trim();
     if (c.length !== 4) return vJoin("Enter the 4-character room code from the screen.");
-    if (!n) return vJoin("Add a nickname.");
+    if (n.split(/\s+/).length < 2) return vJoin("Enter your first and last name.");
     if (!team) return vJoin("Pick your group (A, B or C).");
     try { const id = await rpc("ccr_join", { p_code: c, p_nick: n, p_team: team });
       code = c; me = { id, nick: n, team }; mine = {}; results = {}; saveMe(); history.replaceState(null, "", "?c=" + c); bar(); poll(); }
@@ -190,7 +190,7 @@ function vEnd() {
   const lvl = [1, 2, 3].map(k => { const a = R.filter(r => r.k === k); return { k, n: a.length, pct: a.length ? Math.round(a.filter(r => r.ok).length / a.length * 100) : null }; });
   const haz = Object.entries(results).filter(([id, r]) => (r.type === "mc" || r.type === "skill") && r.answered && !r.ok && r.k >= 2);
   const total = Object.values(results).reduce((s, r) => s + r.pts, 0);
-  app.innerHTML = `<h2>Your private calibration</h2><div class="muted">Only you see this.</div>
+  app.innerHTML = `<h2>Your calibration</h2><div class="muted">This summary is for you. Faculty also see results by name to plan exam prep.</div>
   <div class="panel" style="text-align:center"><div class="muted">Your points</div><div class="res">${total.toLocaleString()}</div></div>
   <div class="panel"><b>When you said…</b><div class="bars">${lvl.map(l => `<div><span>${CCR.conf[l.k].label}</span><span style="background:#0004;border-radius:5px"><i style="width:${l.pct || 0}%;background:${["", "#7f8db5", "#c8a64a", "#ff7a59"][l.k]}"></i></span><b>${l.pct == null ? "–" : l.pct + "%"}</b></div>`).join("")}</div>
   <div class="muted" style="font-size:13px">Well-calibrated looks like: guessing ≈ 50%, fairly sure ≈ 75%, certain ≈ 95%+.</div></div>

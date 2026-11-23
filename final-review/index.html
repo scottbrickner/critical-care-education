@@ -2543,8 +2543,8 @@ function vLobby() {
    <div><div class="qr">${qr.createSvgTag({ cellSize: 8, margin: 2, scalable: true })}</div>
      <div class="big" style="text-align:center;margin-top:10px">Code <b style="color:var(--gold);letter-spacing:6px">${S.code}</b></div>
      <div class="muted" style="text-align:center">${esc(shortUrl())}</div></div>
-   <div><div class="big" style="font-weight:800;margin-bottom:6px">Scan, pick a nickname, join your group</div>
-     <p class="muted" style="font-size:18px;margin-top:0">Use a nickname or initials. The screen only ever shows <b>group</b> scores. Your individual answers stay in the background and only roll up into your group’s score and the class report.</p>
+   <div><div class="big" style="font-weight:800;margin-bottom:6px">Scan, enter your name, join your group</div>
+     <p class="muted" style="font-size:18px;margin-top:0">Join with your <b>first and last name</b>. Only <b>group</b> scores show on screen. Faculty can see individual results afterward to plan your exam prep. It’s practice, not graded, so answer honestly, <i>especially</i> your confidence.</p>
      <div class="plist" id="plist"></div>
      <div class="panel" style="margin-top:14px;font-size:18px"><b>How you score:</b> every tile, you answer AND bet your confidence.
      <div class="row" style="margin-top:8px">${[1, 2, 3].map(k => `<span class="pill">${CCR.conf[k].label} ${CCR.conf[k].mult} → ${CCR.conf[k].stake}</span>`).join("")}</div>
@@ -2758,14 +2758,14 @@ function vFaculty() {
     const miss = a.filter(x => x.c !== key(x.t) && x.k >= 2).map(x => colName(T(x.t).col) + " " + T(x.t).value);
     const acc = a.length ? Math.round(ok / a.length * 100) : null; const expected = a.length ? Math.round(a.reduce((s, x) => s + [0, 50, 75, 95][x.k], 0) / a.length) : null;
     return { p, n: a.length, acc, hz, mc, gap: acc == null ? null : expected - acc, miss }; });
-  app.innerHTML = `<div class="row"><div class="big grow" style="font-weight:800">Faculty view: individual calibration</div><button id="bR">← Report</button></div>
+  app.innerHTML = `<div class="row"><div class="big grow" style="font-weight:800">Faculty view: individual calibration by name</div><button id="bR">← Report</button></div>
   <div class="warn" style="margin:10px 0">Not for the projector. This is for coaching conversations. Gap = how much more confident they were than accurate (positive = overconfident).</div>
-  <div class="panel"><table><tr><th>Nickname</th><th>Group</th><th>Answered</th><th>% correct</th><th>Avg conf</th><th>Overconfidence gap</th><th>Certain-wrong</th><th>Confident misses (review these)</th></tr>
+  <div class="panel"><table><tr><th>Name</th><th>Group</th><th>Answered</th><th>% correct</th><th>Avg conf</th><th>Overconfidence gap</th><th>Certain-wrong</th><th>Confident misses (review these)</th></tr>
   ${rows.sort((a, b) => b.hz - a.hz).map(r => `<tr><td>${esc(r.p.nick)}</td><td>${r.p.team}</td><td>${r.n}</td><td>${r.acc == null ? "–" : r.acc + "%"}</td><td>${r.mc ? r.mc.toFixed(1) : "–"}</td><td>${r.gap == null ? "–" : (r.gap > 0 ? "+" : "") + r.gap}</td><td style="color:${r.hz ? "var(--bad)" : "inherit"};font-weight:700">${r.hz}</td><td class="muted">${esc(r.miss.join(", "))}</td></tr>`).join("")}</table></div>`;
   document.getElementById("bR").onclick = () => go("report");
 }
 function csv() {
-  const L = [["game", "nickname", "group", "tile", "category", "value", "type", "choice", "confidence", "correct_key", "correct", "points"]];
+  const L = [["game", "name", "group", "tile", "category", "value", "type", "choice", "confidence", "correct_key", "correct", "points"]];
   S.answers.forEach(a => { const p = S.players.find(x => x.id === a.p) || {}; const t = T(a.t); if (!t) return;
     L.push([S.code, p.nick, p.team, a.t, colName(t.col), t.value, t.type, a.c, a.k, key(a.t), a.c === key(a.t) ? 1 : 0, scoreAnswer(t, a.c, a.k, key(a.t), credit(a.t))]); });
   Object.keys(S.played).forEach(id => { const P = S.played[id], t = T(id); Object.keys(P.manual || {}).forEach(tm => { const m = P.manual[tm]; if (m.c) L.push([S.code || "offline", "(paddle)", tm, id, colName(t.col), t.value, t.type, m.c, m.k, key(id), m.c === key(id) ? 1 : 0, scoreAnswer(t, m.c, m.k, key(id), credit(id))]); }); });
