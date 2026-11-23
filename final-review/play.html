@@ -89,7 +89,7 @@ function vJoin(err) {
   app.innerHTML = `<h2>Join the review game</h2>
   ${err ? `<div class="panel" style="border-color:var(--bad)">${esc(err)}</div>` : ""}
   <div class="panel"><label class="muted">Room code</label><input id="jc" maxlength="4" autocapitalize="characters" value="${esc(code)}" style="text-transform:uppercase;letter-spacing:6px;font-weight:900;text-align:center;font-size:26px"></div>
-  <div class="panel"><label class="muted">Nickname or initials. The screen only shows team scores.</label><input id="jn" maxlength="24" placeholder="e.g. JB or CodeBlue"></div>
+  <div class="panel"><label class="muted">Nickname or initials. The screen only shows group scores. Your answers stay in the background and roll up into your group’s score.</label><input id="jn" maxlength="24" placeholder="e.g. JB or CodeBlue"></div>
   <div class="panel"><div class="muted" style="margin-bottom:8px">Your group</div><div class="teams" id="jt">${["A", "B", "C"].map(t => `<button data-t="${t}" style="color:${CCR.teams[t].color}">${t}</button>`).join("")}</div></div>
   <button id="jgo" style="background:var(--card);color:#fff;text-align:center;font-weight:800;font-size:18px">Join</button>`;
   let team = null;
@@ -119,6 +119,9 @@ function myRole() { return st && st.roles && me ? st.roles[me.id] : null; }
 function roleCard() { const r = myRole(); if (!r) return "";
   const tip = { "Charge": "You answer for your group in the debrief.", "Skills lead": "You go up for 🔧 hands-on tasks.", "Devil's advocate": "On ⚖ judgment calls, argue for a different answer before we lock." }[r];
   return `<div class="role">Your role this round: <b>${r}</b><div class="muted" style="font-size:14px;margin-top:4px">${tip}</div></div>`; }
+function ctlCard() { if (!st || !st.control || !me) return "";
+  return st.control === me.team ? `<div class="role" style="border-color:${CCR.teams[me.team].color};background:#1d2a1d">🎮 <b>Your group has the board!</b><div class="muted" style="font-size:14px;margin-top:4px">Charge nurse, call out a category and value.</div></div>`
+    : `<div class="panel" style="font-size:15px">🎮 <b style="color:${CCR.teams[st.control].color}">Group ${st.control}</b> picks next</div>`; }
 function onState() {
   bar(); const s = st;
   if (s.phase === "open") {
@@ -131,7 +134,7 @@ function onState() {
   if (s.phase === "reveal") return vReveal();
   if (s.phase === "end") return vEnd();
   // lobby / board
-  app.innerHTML = `<div class="big">👀</div><h2 style="text-align:center">Eyes on the big screen</h2><p class="muted" style="text-align:center">${s.phase === "lobby" ? "Waiting for the game to start…" : (s.msg ? esc(s.msg) : "Next question is coming.")}</p>${roleCard()}
+  app.innerHTML = `<div class="big">👀</div><h2 style="text-align:center">Eyes on the big screen</h2><p class="muted" style="text-align:center">${s.phase === "lobby" ? "Waiting for the game to start…" : (s.msg ? esc(s.msg) : "Next question is coming.")}</p>${ctlCard()}${roleCard()}
   <div class="panel" style="font-size:14px"><b>Confidence stakes</b><br>${[1, 2, 3].map(k => `${CCR.conf[k].label} ${CCR.conf[k].mult}: ${CCR.conf[k].stake}`).join("<br>")}<div class="muted" style="margin-top:6px">Certain + wrong costs the most. Honest "guessing" is safe.</div></div>`;
 }
 function remain() { return Math.max(0, Math.ceil((st.dur || 60) - (Date.now() - openSeenAt) / 1000)); }
@@ -144,13 +147,14 @@ function vOpen() {
   ${s.visual ? `<div class="panel" style="text-align:center">📺 Look at the rhythm strip on the big screen</div>` : ""}
   ${s.data ? `<div class="data">${s.data.map(d => `<div><b>${esc(d[0])}</b>${esc(d[1])}</div>`).join("")}</div>` : ""}
   ${s.opts.map((o, i) => `<button class="opt ${draft.c === LETTERS[i] ? "sel" : ""}" data-c="${LETTERS[i]}"><span class="L">${LETTERS[i]}</span><span>${esc(o)}</span></button>`).join("")}
-  <div class="muted" style="margin:12px 0 6px">How sure are you?${s.type === "judge" ? " (Judgment call: no multiplier, but we still want to know.)" : ""}</div>
-  <div class="conf">${[1, 2, 3].map(k => `<button data-k="${k}" class="${draft.k === k ? "sel" : ""}"><b>${CCR.conf[k].label}</b><small>${s.type === "judge" ? "&nbsp;" : CCR.conf[k].stake}</small></button>`).join("")}</div>
+  ${s.type === "toss" ? `<div class="panel" style="text-align:center">🎲 Toss-up: no points. The group with the most right answers gets the board.</div>` : `<div class="muted" style="margin:12px 0 6px">How sure are you?${s.type === "judge" ? " (Judgment call: no multiplier, but we still want to know.)" : ""}</div>
+  <div class="conf">${[1, 2, 3].map(k => `<button data-k="${k}" class="${draft.k === k ? "sel" : ""}"><b>${CCR.conf[k].label}</b><small>${s.type === "judge" ? "&nbsp;" : CCR.conf[k].stake}</small></button>`).join("")}</div>`}
   ${roleCard()}`;
+  if (s.type === "toss") draft.k = 1;
   app.querySelectorAll("[data-c]").forEach(b => b.onclick = () => { draft.c = b.dataset.c; vOpen(); });
   app.querySelectorAll("[data-k]").forEach(b => b.onclick = () => { draft.k = +b.dataset.k; vOpen(); });
   go.style.display = "block";
-  go.innerHTML = `<button id="sub" ${draft.c && draft.k ? "" : "disabled"}>${sent ? "✓ Locked in · tap an option to change" : (draft.c && draft.k ? `Submit ${draft.c} · ${CCR.conf[draft.k].label}` : "Pick an answer + confidence")}</button>`;
+  go.innerHTML = `<button id="sub" ${draft.c && draft.k ? "" : "disabled"}>${sent ? "✓ Locked in · tap an option to change" : (draft.c && draft.k ? (s.type === "toss" ? `Submit ${draft.c}` : `Submit ${draft.c} · ${CCR.conf[draft.k].label}`) : (s.type === "toss" ? "Pick an answer" : "Pick an answer + confidence"))}</button>`;
   document.getElementById("sub").onclick = async () => {
     if (!draft.c || !draft.k) return;
     const b = document.getElementById("sub"); b.disabled = true; b.textContent = "Sending…";
@@ -170,23 +174,23 @@ function vLocked() {
 function vReveal() {
   const s = st, m = mine[s.tile];
   const t = { type: s.type, value: s.value };
-  const pts = m && m.sent ? scoreAnswer(t, m.c, m.k, s.key, s.credit) : 0;
+  const pts = m && m.sent && s.type !== "toss" ? scoreAnswer(t, m.c, m.k, s.key, s.credit) : 0;
   const ok = m && m.c === s.key;
   results[s.tile] = { pts, ok: !!ok, answered: !!(m && m.sent), k: m ? m.k : null, type: s.type, value: s.value, cat: s.cat || "", stem: s.stem };
   saveMe(); bar();
-  const msg = !m || !m.sent ? "No answer" : s.type === "judge" ? (ok ? "Best action ⚖" : (s.credit && s.credit[m.c] ? "Partial credit" : "Not the best action")) : ok ? "Correct!" : (m.k === 3 ? "Certain, and wrong. Flag this one." : "Not this time");
+  const msg = !m || !m.sent ? "No answer" : s.type === "toss" ? (ok ? "Got it! 🎬" : "Nope 🎬") : s.type === "judge" ? (ok ? "Best action ⚖" : (s.credit && s.credit[m.c] ? "Partial credit" : "Not the best action")) : ok ? "Correct!" : (m.k === 3 ? "Certain, and wrong. Flag this one." : "Not this time");
   app.innerHTML = `<div class="res" style="color:${ok ? "var(--ok)" : (pts < 0 ? "var(--bad)" : "var(--ink)")}">${msg}</div>
-  <div style="text-align:center;font-size:22px;font-weight:800">${pts > 0 ? "+" : ""}${pts.toLocaleString()} pts</div>
+  <div style="text-align:center;font-size:22px;font-weight:800">${s.type === "toss" ? "" : (pts > 0 ? "+" : "") + pts.toLocaleString() + " pts"}</div>${ctlCard()}
   <div class="stem" style="font-size:16px">${esc(s.stem)}</div>
   ${s.opts.map((o, i) => { const L = LETTERS[i]; return `<div class="opt panel ${L === s.key ? "key" : (m && m.c === L ? "mine" : "")}" style="margin:6px 0;padding:10px"><span class="L">${L}</span><span>${esc(o)}${m && m.c === L ? ` <span class="muted">(you, ${CCR.conf[m.k].label.toLowerCase()})</span>` : ""}</span></div>`; }).join("")}
   <div class="why">${esc(s.why)}</div>${roleCard()}`;
 }
 function vEnd() {
-  const R = Object.values(results).filter(r => r.type !== "judge" && r.answered);
+  const R = Object.values(results).filter(r => (r.type === "mc" || r.type === "skill") && r.answered);
   const lvl = [1, 2, 3].map(k => { const a = R.filter(r => r.k === k); return { k, n: a.length, pct: a.length ? Math.round(a.filter(r => r.ok).length / a.length * 100) : null }; });
-  const haz = Object.entries(results).filter(([id, r]) => r.type !== "judge" && r.answered && !r.ok && r.k >= 2);
+  const haz = Object.entries(results).filter(([id, r]) => (r.type === "mc" || r.type === "skill") && r.answered && !r.ok && r.k >= 2);
   const total = Object.values(results).reduce((s, r) => s + r.pts, 0);
-  app.innerHTML = `<h2>Your private calibration</h2><div class="muted">Only you see this. Faculty see a coaching summary.</div>
+  app.innerHTML = `<h2>Your private calibration</h2><div class="muted">Only you see this.</div>
   <div class="panel" style="text-align:center"><div class="muted">Your points</div><div class="res">${total.toLocaleString()}</div></div>
   <div class="panel"><b>When you said…</b><div class="bars">${lvl.map(l => `<div><span>${CCR.conf[l.k].label}</span><span style="background:#0004;border-radius:5px"><i style="width:${l.pct || 0}%;background:${["", "#7f8db5", "#c8a64a", "#ff7a59"][l.k]}"></i></span><b>${l.pct == null ? "–" : l.pct + "%"}</b></div>`).join("")}</div>
   <div class="muted" style="font-size:13px">Well-calibrated looks like: guessing ≈ 50%, fairly sure ≈ 75%, certain ≈ 95%+.</div></div>
